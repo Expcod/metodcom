@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Metodcom | Bosh Sahifa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="{% static 'css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
+    <link href="{% static 'css/style.css' %}" rel='stylesheet' type='text/css' />	
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <link href='https://fonts.googleapis.com/css?family=Arvo:400,700,400italic|PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <div id="home" class="header">
+        <div class="top-header">
+            <div class="container">
+                <div class="logo">
+                    <a href="{% url 'maktab:home' %}"><h1>Metod<span>com</span></h1></a>
+                </div>
+                <div class="top-menu">
+                    <span class="menu"> </span>
+                    <ul class="cl-effect-16">
+                        <li><a class="active" href="{% url 'maktab:home' %}" data-hover="Bosh Sahifa">Bosh Sahifa</a></li>
+                        <li><a href="{% url 'maktab:grade_list' %}" data-hover="Metodikalar">Metodikalar</a></li>
+                        <li><a href="{% url 'maktab:textbook_list' %}" data-hover="Darsliklar">Darsliklar</a></li>
+                        <div class="clearfix"></div>
+                    </ul>
+                </div>
+                <script>
+                    $("span.menu").click(function(){
+                        $(".top-menu ul").slideToggle("slow" , function(){
+                        });
+                    });
+                </script>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <script src="{% static 'js/responsiveslides.min.js' %}"></script>
+        <script>
+            $(function () {
+                $("#slider4").responsiveSlides({
+                    auto: true,
+                    pager: true,
+                    nav: false,
+                    speed: 500,
+                    namespace: "callbacks",
+                    before: function () {
+                        $('.events').append("<li>oldin voqea ishga tushdi.</li>");
+                    },
+                    after: function () {
+                        $('.events').append("<li>keyin voqea ishga tushdi.</li>");
+                    }
+                });
+            });
+        </script>
+        <div id="top" class="callbacks_container">
+            <ul class="rslides" id="slider4">
+                <li>
+                    <div class="slider-top">
+                        <h2>Bilim - Bu Kuch</h2>
+                        <p>Bilim - bu kuch. Har bir bola uchun sifatli ta’lim va metodik qo‘llanmalar.</p>
+                        <h6>Har Bir Bola Uchun Ochiq</h6>
+                    </div>
+                </li>
+                <li>
+                    <div class="slider-top">
+                        <h2>Mukammal Ta’lim</h2>
+                        <p>Bizning platformada boshlang‘ich maktab o‘qituvchilari uchun eng yaxshi resurslar.</p>
+                        <h6>Har Bir Bola Uchun Ochiq</h6>
+                    </div>
+                </li>
+                <li>
+                    <div class="slider-top">
+                        <h2>Maktab Ta’limi</h2>
+                        <p>Metodik qo‘llanmalar va darsliklar bilan ta’limni yanada samarali qiling.</p>
+                        <h6>Har Bir Bola Uchun Ochiq</h6>
+                    </div>
+                </li>
+                <li>
+                    <div class="slider-top">
+                        <h2>Mukammal Ta’lim</h2>
+                        <p>Bizning platformada boshlang‘ich maktab o‘qituvchilari uchun eng yaxshi resurslar.</p>
+                        <h6>Har Bir Bola Uchun Ochiq</h6>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="slide-bottom">
+        <div class="slide-bottom-grids">
+            <div class="container">
+                <div class="col-md-6 slide-bottom-grid">
+                    <h3>Xush Kelibsiz!</h3>
+                    <p>Bizning platformada har bir bola uchun eng yaxshi ta’lim muhiti yaratilgan. O‘qituvchilar uchun metodik qo‘llanmalar va darsliklar.</p>
+                </div>
+                <div class="col-md-6 slide-bottom-grid">
+                    <h3>Bizning Maqsadimiz</h3>
+                    <p>Har bir bolaga sifatli ta’lim berish va ularning ijodiy qobiliyatlarini rivojlantirishni maqsad qilganmiz.</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <div class="service-section">
+        <div class="col-md-7 service-section-grids">
+            <div class="container">
+                <div class="serve-head">
+                    <h3>Bizning Faoliyatlar</h3>
+                    <h6>Bolalaringiz uchun eng yaxshi xizmatlar</h6>
+                </div>
+            </div>
+            <div class="service-grid">
+                <div class="service-section-grid">
+                    <div class="icon">
+                        <i class="book"></i>
+                    </div>
+                    <div class="icon-text">
+                        <h4>Darsliklar va Qo‘llanmalar</h4>
+                        <p>Boshlang‘ich maktab o‘quvchilari uchun sifatli darsliklar va metodik qo‘llanmalar.</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="service-section-grid">
+                    <div class="icon">
+                        <i class="pencil"></i>
+                    </div>
+                    <div class="icon-text">
+                        <h4>Ijodiy Ta’lim</h4>
+                        <p>Bolalarning ijodiy qobiliyatlarini rivojlantirishga yo‘naltirilgan darslar.</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="service-section-grid">
+                    <div class="icon">
+                        <i class="award"></i>
+                    </div>
+                    <div class="icon-text">
+                        <h4>Muvaffaqiyatli Natijalar</h4>
+                        <p>Har bir bolaning o‘z imkoniyatlarini ro‘yobga chiqarishiga yordam beramiz.</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="col-md-5 service-text">
+            <p></p>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="news-section">
+        <div class="container">
+            <div class="news-head">
+                <h3>So‘nggi Yangiliklar</h3>
+                <p>Bizning eng muhim yangiliklarimizni kuzatib boring</p>
+            </div>
+            <div class="news">
+                <div class="col-md-4 test-right01 test1">
+                    <img src="{% static 'images/n1.jpg' %}" class="img-responsive" alt="" />
+                    <div class="textbox textbox1">
+                        <h4 class="col-md-4 date">14<br><span>Iyun</span><br><label>0 <img src="{% static 'images/comment.png' %}" class="img-responsive" alt="" /></label></h4>
+                        <p class="col-md-8 news">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 test-right01 test1">
+                    <img src="{% static 'images/n2.jpg' %}" class="img-responsive" alt="" />
+                    <div class="textbox textbox1">
+                        <h4 class="col-md-4 date">15<br><span>Iyul</span><br><label>0 <img src="{% static 'images/comment.png' %}" class="img-responsive" alt="" /></label></h4>
+                        <p class="col-md-8 news">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-md-4 test-right01 test1">
+                    <img src="{% static 'images/n3.jpg' %}" class="img-responsive" alt="" />
+                    <div class="textbox textbox1">
+                        <h4 class="col-md-4 date">30<br><span>Avgust</span><br><label>0 <img src="{% static 'images/comment.png' %}" class="img-responsive" alt="" /></label></h4>
+                        <p class="col-md-8 news">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <div class="culture-section">
+        <div class="container">
+            <div class="culture-head">
+                <h3>Bizning Tadbirlar</h3>
+                <p>Tadbirlarimizni o‘tkazib yubormang</p>
+            </div>
+            <div class="culture">
+                <div class="col-md-6 culture-grids">
+                    <a href="#"><img src="{% static 'images/event1.jpg' %}" class="img-responsive" alt="" /></a>
+                    <div class="e_date">
+                        <h4>15<br><span>Iyul</span></h4>
+                    </div>
+                    <a href="#"><h5>SAN’AT SESSIYASI</h5></a>
+                    <p>Lorem Ipsum - bu matn va nashriyot sanoatining oddiy soxta matnidir.</p>
+                </div>
+                <div class="col-md-6 culture-grids">
+                    <a href="#"><img src="{% static 'images/event2.jpg' %}" class="img-responsive" alt="" /></a>
+                    <div class="e_date">
+                        <h4>15<br><span>Iyul</span></h4>
+                    </div>
+                    <a href="#"><h5>SAN’AT SESSIYASI</h5></a>
+                    <p>Lorem Ipsum - bu matn va nashriyot sanoatining oddiy soxta matnidir.</p>
+                </div>
+                <div class="col-md-6 culture-grids">
+                    <a href="#"><img src="{% static 'images/event3.jpg' %}" class="img-responsive" alt="" /></a>
+                    <div class="e_date">
+                        <h4>15<br><span>Iyul</span></h4>
+                    </div>
+                    <a href="#"><h5>SAN’AT SESSIYASI</h5></a>
+                    <p>Lorem Ipsum - bu matn va nashriyot sanoatining oddiy soxta matnidir.</p>
+                </div>
+                <div class="col-md-6 culture-grids">
+                    <a href="#"><img src="{% static 'images/event4.jpg' %}" class="img-responsive" alt="" /></a>
+                    <div class="e_date">
+                        <h4>15<br><span>Iyul</span></h4>
+                    </div>
+                    <a href="#"><h5>SAN’AT SESSIYASI</h5></a>
+                    <p>Lorem Ipsum - bu matn va nashriyot sanoatining oddiy soxta matnidir.</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <div class="mid-bg">
+        <div class="container">
+            <div class="mid-section">
+                <h3>Maktabdagi Birinchi Kun!</h3>
+                <h4>TAYYORMISIZ?</h4>
+                <p>Har bir bola uchun ta’lim - bu yangi imkoniyatlar eshigi. Bizning maktabda o‘quvchilar o‘z qobiliyatlarini kashf etadilar.</p>
+            </div>
+        </div>
+    </div>
+    <div id="contact" class="address">
+        <div class="col-md-7 address-left">
+            <div class="products">
+                <h3>Darslar</h3>
+                <ul>
+                    <li><a href="{% url 'maktab:grade_list' %}">Sport</a></li>
+                    <li><a href="{% url 'maktab:grade_list' %}">Musiqa</a></li>
+                    <li><a href="{% url 'maktab:grade_list' %}">Raqs</a></li>
+                </ul>
+            </div>
+            <div class="company-adout">
+                <h3>O‘rganing</h3>
+                <ul>
+                    <li><a href="{% url 'maktab:grade_list' %}">O‘qituvchilar</a></li>
+                    <li><a href="#">Aloqa</a></li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+            <p>Ijodiy jarayonning o‘zi natijalarga e’tibor bermaydi - u faqat jarayonni sevadi. Jarayonni sevishni o‘rganing va keyingi nima bo‘lishidan xavotirlanmang.</p>
+        </div>
+        <div class="col-md-5 address-right">
+            <h3>Bizning Ofislar</h3>
+            <p>Toshkent sh., Chilanzor tumani, 45-uy</p>
+            <p>+998 71 123 45 67</p>
+            <ul class="bottom">
+                <li>Samarqand sh., Registon ko‘chasi, 12-uy</li>
+                <li>+998 66 234 56 78</li>
+            </ul>
+            <ul>
+                <li>Farg‘ona sh., Al-Farg‘oniy ko‘chasi, 5-uy</li>
+                <li>+998 73 345 67 89</li>
+                <li><a class="mail" href="mailto:info@example.com">info@maktab.uz</a></li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="footer">
+        <div class="container">
+            <div class="copy">
+                <p>© 2025 Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $(".scroll").click(function(event){		
+                event.preventDefault();
+                $('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $().UItoTop({ easingType: 'easeOutQuart' });
+        });
+    </script>
+    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"></span></a>
+</body>
+</html>

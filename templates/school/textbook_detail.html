@@ -1,0 +1,366 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ textbook.title }} - {{ lesson.title }}</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/textbook_detail.css' %}">
+  <!-- PDF.js for better PDF viewing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'maktab:home' %}">
+        <i class="bi bi-mortarboard-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+        <span class="fw-bold">Metod<span class="text-primary">com</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:home' %}">Bosh sahifa</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:grade_list' %}">Metodikalar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'maktab:textbook_list' %}">Darsliklar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="textbook-detail-container">
+      <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'maktab:home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'maktab:textbook_list' %}">Darsliklar</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ textbook.title }}</li>
+          </ol>
+        </nav>
+
+        <!-- Textbook Header -->
+        <div class="textbook-header">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h1 class="textbook-title">
+                <i class="bi bi-book-fill text-primary me-2"></i>
+                {{ textbook.title }}
+              </h1>
+              {% if lesson %}
+                <h2 class="lesson-title">{{ lesson.title }}</h2>
+              {% endif %}
+              <p class="textbook-description">{{ textbook.description }}</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+              <div class="textbook-meta">
+                {% if textbook.author %}
+                  <span class="textbook-author">
+                    <i class="bi bi-person"></i> {{ textbook.author }}
+                  </span>
+                {% endif %}
+                {% if textbook.year %}
+                  <span class="textbook-year">
+                    <i class="bi bi-calendar"></i> {{ textbook.year }}
+                  </span>
+                {% endif %}
+                {% if textbook.grade %}
+                  <span class="textbook-grade">
+                    <i class="bi bi-mortarboard"></i> {{ textbook.grade.name }}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Textbook and Methodologies -->
+        <div class="row mt-4">
+          <!-- Textbook Section -->
+          <div class="col-lg-8 mb-4">
+            <div class="pdf-container">
+              <div class="pdf-header">
+                <h2 class="pdf-title">
+                  <i class="bi bi-file-earmark-pdf text-primary me-2"></i>
+                  Darslik sahifasi
+                </h2>
+                {% if page %}
+                  <div class="pdf-page-info">
+                    <span class="badge bg-primary">{{ page.page_number }}-sahifa</span>
+                  </div>
+                {% endif %}
+              </div>
+
+              {% if page and textbook.pdf_file %}
+                <div class="pdf-viewer">
+                  <div class="pdf-toolbar">
+                    <button id="prev" class="btn btn-sm btn-outline-primary">
+                      <i class="bi bi-chevron-left"></i> Oldingi
+                    </button>
+                    <span id="page_num" class="page-num">{{ page.page_number }}</span> / <span id="page_count" class="page-count">...</span>
+                    <button id="next" class="btn btn-sm btn-outline-primary">
+                      Keyingi <i class="bi bi-chevron-right"></i>
+                    </button>
+                    <button id="zoomIn" class="btn btn-sm btn-outline-secondary">
+                      <i class="bi bi-zoom-in"></i>
+                    </button>
+                    <button id="zoomOut" class="btn btn-sm btn-outline-secondary">
+                      <i class="bi bi-zoom-out"></i>
+                    </button>
+                    <button id="fullscreen" class="btn btn-sm btn-outline-secondary">
+                      <i class="bi bi-fullscreen"></i>
+                    </button>
+                    <a href="{{ textbook.pdf_file.url }}" class="btn btn-sm btn-outline-success" download>
+                      <i class="bi bi-download"></i> Yuklab olish
+                    </a>
+                  </div>
+                  <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
+                  <div class="pdf-loading">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Yuklanmoqda...</span>
+                    </div>
+                    <p>PDF yuklanmoqda...</p>
+                  </div>
+                </div>
+              {% else %}
+                <div class="pdf-empty">
+                  <div class="pdf-empty-icon">
+                    <i class="bi bi-file-earmark-x"></i>
+                  </div>
+                  <h3 class="pdf-empty-title">PDF fayl topilmadi</h3>
+                  <p class="pdf-empty-text">Ushbu darslik uchun PDF fayl mavjud emas.</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Methodologies Section -->
+          <div class="col-lg-4">
+            <div class="methodologies-container">
+              <div class="methodologies-header">
+                <h2 class="methodologies-title">
+                  <i class="bi bi-file-earmark-text text-primary me-2"></i>
+                  Metodik Qo'llanmalar
+                </h2>
+                <div class="methodologies-count">
+                  <span class="badge bg-primary">{{ methodologies|length }}</span>
+                </div>
+              </div>
+
+              {% if methodologies %}
+                <div class="methodologies-list">
+                  {% for methodology in methodologies %}
+                    <div class="methodology-item">
+                      <h3 class="methodology-title">{{ methodology.title }}</h3>
+                      <div class="methodology-content">
+                        {{ methodology.content|linebreaks }}
+                      </div>
+                      
+                      {% if methodology.image %}
+                        <div class="methodology-image">
+                          <img src="{{ methodology.image.url }}" alt="{{ methodology.title }}" class="img-fluid rounded">
+                        </div>
+                      {% endif %}
+                      
+                      {% if methodology.file %}
+                        <div class="methodology-file">
+                          <a href="{{ methodology.file.url }}" class="btn btn-outline-primary btn-sm" download>
+                            <i class="bi bi-download"></i> Faylni yuklab olish
+                          </a>
+                        </div>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="methodologies-empty">
+                  <div class="methodologies-empty-icon">
+                    <i class="bi bi-file-earmark-x"></i>
+                  </div>
+                  <h3 class="methodologies-empty-title">Metodikalar topilmadi</h3>
+                  <p class="methodologies-empty-text">Ushbu darslik uchun metodikalar mavjud emas.</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons mt-4">
+          <a href="{% url 'maktab:textbook_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Darsliklar ro'yxatiga qaytish
+          </a>
+          
+          {% if lesson %}
+            <a href="{% url 'maktab:lesson_detail' lesson.id %}" class="btn btn-primary">
+              Dars tafsilotlarini ko'rish <i class="bi bi-arrow-right"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-light py-4 mt-auto border-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; {% now "Y" %} MetodCom. Barcha huquqlar himoyalangan.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="text-decoration-none text-muted me-3">Foydalanish shartlari</a>
+          <a href="#" class="text-decoration-none text-muted">Bog'lanish</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- PDF.js Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      {% if page and textbook.pdf_file %}
+        // PDF.js initialization
+        const pdfUrl = "{{ textbook.pdf_file.url }}";
+        const initialPage = {{ page.page_number }};
+        let pdfDoc = null;
+        let pageNum = initialPage;
+        let pageRendering = false;
+        let pageNumPending = null;
+        let scale = 1.5;
+        const canvas = document.getElementById('pdf-canvas');
+        const ctx = canvas.getContext('2d');
+        const loadingIndicator = document.querySelector('.pdf-loading');
+        const pdfContainer = document.querySelector('.pdf-viewer');
+
+        // Initialize PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+
+        // Load the PDF
+        pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+          pdfDoc = pdf;
+          document.getElementById('page_count').textContent = pdf.numPages;
+          
+          // Initial render
+          renderPage(pageNum);
+        }).catch(function(error) {
+          console.error('Error loading PDF:', error);
+          loadingIndicator.innerHTML = '<p class="text-danger">PDF yuklanishda xatolik yuz berdi.</p>';
+        });
+
+        // Render the page
+        function renderPage(num) {
+          pageRendering = true;
+          loadingIndicator.style.display = 'flex';
+          
+          // Get the page
+          pdfDoc.getPage(num).then(function(page) {
+            const viewport = page.getViewport({ scale: scale });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            
+            // Render PDF page into canvas context
+            const renderContext = {
+              canvasContext: ctx,
+              viewport: viewport
+            };
+            
+            const renderTask = page.render(renderContext);
+            
+            // Wait for rendering to finish
+            renderTask.promise.then(function() {
+              pageRendering = false;
+              loadingIndicator.style.display = 'none';
+              
+              if (pageNumPending !== null) {
+                // New page rendering is pending
+                renderPage(pageNumPending);
+                pageNumPending = null;
+              }
+            });
+          });
+          
+          // Update page counters
+          document.getElementById('page_num').textContent = num;
+        }
+
+        // Go to previous page
+        function onPrevPage() {
+          if (pageNum <= 1) {
+            return;
+          }
+          pageNum--;
+          queueRenderPage(pageNum);
+        }
+
+        // Go to next page
+        function onNextPage() {
+          if (pageNum >= pdfDoc.numPages) {
+            return;
+          }
+          pageNum++;
+          queueRenderPage(pageNum);
+        }
+
+        // Queue the page rendering
+        function queueRenderPage(num) {
+          if (pageRendering) {
+            pageNumPending = num;
+          } else {
+            renderPage(num);
+          }
+        }
+
+        // Zoom in
+        function zoomIn() {
+          scale += 0.25;
+          queueRenderPage(pageNum);
+        }
+
+        // Zoom out
+        function zoomOut() {
+          if (scale <= 0.5) return;
+          scale -= 0.25;
+          queueRenderPage(pageNum);
+        }
+
+        // Toggle fullscreen
+        function toggleFullscreen() {
+          if (!document.fullscreenElement) {
+            pdfContainer.requestFullscreen().catch(err => {
+              console.error(`Error attempting to enable fullscreen: ${err.message}`);
+            });
+          } else {
+            document.exitFullscreen();
+          }
+        }
+
+        // Button event listeners
+        document.getElementById('prev').addEventListener('click', onPrevPage);
+        document.getElementById('next').addEventListener('click', onNextPage);
+        document.getElementById('zoomIn').addEventListener('click', zoomIn);
+        document.getElementById('zoomOut').addEventListener('click', zoomOut);
+        document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
+      {% endif %}
+    });
+  </script>
+</body>
+</html>

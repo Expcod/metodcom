@@ -1,0 +1,52 @@
+/* Custom CSS for Metodikalar page */
+
+/* Background gradient */
+.metodika-bg {
+  background: linear-gradient(to bottom, #ebf5ff, #ffffff);
+}
+
+/* Card styling */
+.metodika-card {
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.metodika-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-accent {
+  height: 0.5rem;
+  width: 100%;
+}
+
+/* Button icon animation */
+.btn-icon {
+  transition: transform 0.2s ease;
+}
+
+.btn:hover .btn-icon {
+  transform: translateX(4px);
+}
+
+/* Custom breadcrumb styling */
+.breadcrumb-item + .breadcrumb-item::before {
+  font-family: "Bootstrap Icons";
+  content: "\F231"; /* Bootstrap Icons chevron-right */
+  font-size: 0.7rem;
+}
+
+/* Search input styling */
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+  .display-6 {
+    font-size: 1.75rem;
+  }
+}

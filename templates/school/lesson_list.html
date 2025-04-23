@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ section.name }} - Darslar</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/lesson_list.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'maktab:home' %}">
+        <i class="bi bi-mortarboard-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+        <span class="fw-bold">Maktab</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:home' %}">Bosh sahifa</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:grade_list' %}">Metodikalar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:textbook_list' %}">Darsliklar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="lesson-container">
+      <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'maktab:home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'maktab:grade_list' %}">Sinf Bo'yicha Metodikalar</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'maktab:subject_list' section.subject.grade.id %}">{{ section.subject.grade.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ section.name }}</li>
+          </ol>
+        </nav>
+
+        <!-- Header -->
+        <div class="lesson-header">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h1 class="lesson-title">
+                <i class="bi bi-book-fill text-primary me-2"></i>
+                {{ section.subject.name }} - {{ section.name }}
+              </h1>
+              <p class="lesson-description">{{ section.description }}</p>
+            </div>
+            <div class="col-md-4">
+              <div class="search-container">
+                <input type="text" id="lessonSearch" class="form-control" placeholder="Darsni qidirish...">
+                <i class="bi bi-search search-icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lessons List -->
+        <div class="lessons-list-container">
+          <div class="lessons-list-header">
+            <h2 class="lessons-list-title">Darslar ro'yxati</h2>
+            <div class="lessons-count">Jami: <span class="badge bg-primary">{{ lessons|length }}</span> dars</div>
+          </div>
+
+          {% if lessons %}
+            <div class="lessons-list">
+              {% for lesson in lessons %}
+                <div class="lesson-item" data-lesson-title="{{ lesson.title|lower }}">
+                  <div class="lesson-number">{{ lesson.order }}</div>
+                  <div class="lesson-content">
+                    <h3 class="lesson-item-title">{{ lesson.title }}</h3>
+                    {% if lesson.description %}
+                      <p class="lesson-item-description">{{ lesson.description|truncatechars:120 }}</p>
+                    {% endif %}
+                    <div class="lesson-meta">
+                      {% with methodology_count=lesson.methodologies.count %}
+                        {% if methodology_count > 0 %}
+                          <span class="lesson-methodology-count">
+                            <i class="bi bi-file-earmark-text"></i> {{ methodology_count }} metodika
+                          </span>
+                        {% endif %}
+                      {% endwith %}
+                      
+                      {% with page=lesson.textbook_pages.first %}
+                        {% if page %}
+                          <span class="lesson-page">
+                            <i class="bi bi-book"></i> {{ page.page_number }}-sahifa
+                          </span>
+                        {% endif %}
+                      {% endwith %}
+                    </div>
+                  </div>
+                  <div class="lesson-actions">
+                    <a href="{% url 'maktab:lesson_detail' lesson.id %}" class="btn btn-outline-primary btn-sm">
+                      <i class="bi bi-eye"></i> Ko'rish
+                    </a>
+                    {% with methodology=lesson.methodologies.first %}
+                      {% if methodology and methodology.file %}
+                        <a href="{{ methodology.file.url }}" class="btn btn-outline-success btn-sm" download>
+                          <i class="bi bi-download"></i> Yuklab olish
+                        </a>
+                      {% endif %}
+                    {% endwith %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="lessons-empty">
+              <div class="lessons-empty-icon">
+                <i class="bi bi-journal-x"></i>
+              </div>
+              <h3 class="lessons-empty-title">Darslar topilmadi</h3>
+              <p class="lessons-empty-text">Ushbu bo'lim uchun hozircha darslar mavjud emas.</p>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+            <i class="bi bi-arrow-left"></i> Orqaga
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-light py-4 mt-auto border-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; {% now "Y" %} MetodCom. Barcha huquqlar himoyalangan.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="text-decoration-none text-muted me-3">Foydalanish shartlari</a>
+          <a href="#" class="text-decoration-none text-muted">Bog'lanish</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('lessonSearch');
+      const lessonItems = document.querySelectorAll('.lesson-item');
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        
+        lessonItems.forEach(item => {
+          const lessonTitle = item.getAttribute('data-lesson-title');
+          if (lessonTitle.includes(searchTerm)) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
