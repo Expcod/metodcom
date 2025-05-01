@@ -56,6 +56,7 @@ class Methodology(models.Model):
     image = models.ImageField(upload_to='methodologies/images/', blank=True, null=True, verbose_name="Rasm")
     file = models.FileField(upload_to='methodologies/files/', blank=True, null=True, verbose_name="Fayl")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Yaratilgan vaqt")
+    link = models.CharField(max_length=200, blank=True, null=True, verbose_name="Havola")
 
     def __str__(self):
         return self.title

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suvning tabiatda aylanishi - Vizual tushuntirish</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #f8f9fc;
+      --accent-color: #36b9cc;
+      --success-color: #1cc88a;
+      --warning-color: #f6c23e;
+      --danger-color: #e74a3b;
+      --water-color: #36b9cc;
+      --cloud-color: #f8f9fc;
+      --sun-color: #f6c23e;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fc;
+      color: #333;
+    }
+    
+    .header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.5rem 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .visual-container {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+      margin: 2rem 0;
+      padding: 2rem;
+    }
+    
+    .step-container {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border-radius: 8px;
+      background-color: var(--secondary-color);
+      transition: all 0.3s ease;
+    }
+    
+    .step-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .step-number {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      margin-right: 1rem;
+      font-weight: bold;
+    }
+    
+    .step-title {
+      display: inline-block;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+    
+    .explanation-text {
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+    
+    .visual-representation {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      border: 1px solid #e3e6f0;
+    }
+    
+    .water-cycle-container {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      background-color: #e8f4f8;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .sun {
+      position: absolute;
+      top: 50px;
+      right: 100px;
+      width: 80px;
+      height: 80px;
+      background-color: var(--sun-color);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(246, 194, 62, 0.8);
+    }
+    
+    .sun-rays {
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      width: 110px;
+      height: 110px;
+      background: radial-gradient(circle, rgba(246, 194, 62, 0) 30%, rgba(246, 194, 62, 0.5) 70%);
+      border-radius: 50%;
+    }
+    
+    .cloud {
+      position: absolute;
+      background-color: var(--cloud-color);
+      border-radius: 50px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cloud-1 {
+      top: 100px;
+      left: 100px;
+      width: 150px;
+      height: 60px;
+    }
+    
+    .cloud-2 {
+      top: 80px;
+      left: 300px;
+      width: 180px;
+      height: 70px;
+    }
+    
+    .cloud-bubble {
+      position: absolute;
+      background-color: var(--cloud-color);
+      border-radius: 50%;
+    }
+    
+    .ocean {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background-color: var(--water-color);
+      border-radius: 0 0 8px 8px;
+    }
+    
+    .mountain {
+      position: absolute;
+      bottom: 150px;
+      width: 0;
+      height: 0;
+      border-left: 150px solid transparent;
+      border-right: 150px solid transparent;
+      border-bottom: 200px solid #8b5a2b;
+    }
+    
+    .mountain-1 {
+      left: 50px;
+    }
+    
+    .mountain-2 {
+      left: 300px;
+      bottom: 150px;
+      border-left: 120px solid transparent;
+      border-right: 120px solid transparent;
+      border-bottom: 180px solid #a67c52;
+    }
+    
+    .mountain-snow {
+      position: absolute;
+      top: -40px;
+      left: -40px;
+      width: 80px;
+      height: 40px;
+      background-color: white;
+      border-radius: 50%;
+    }
+    
+    .rain {
+      position: absolute;
+      top: 180px;
+      left: 350px;
+      width: 100px;
+      height: 150px;
+      display: none;
+    }
+    
+    .raindrop {
+      position: absolute;
+      width: 4px;
+      height: 15px;
+      background-color: var(--water-color);
+      border-radius: 50% 50% 0 50%;
+      transform: rotate(45deg);
+      opacity: 0.7;
+    }
+    
+    .river {
+      position: absolute;
+      bottom: 150px;
+      left: 250px;
+      width: 100px;
+      height: 200px;
+      background-color: var(--water-color);
+      border-radius: 50px 50px 0 0;
+      transform: rotate(45deg);
+      transform-origin: bottom left;
+    }
+    
+    .evaporation {
+      position: absolute;
+      bottom: 150px;
+      left: 400px;
+      width: 100px;
+      height: 200px;
+      display: none;
+    }
+    
+    .vapor {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+    }
+    
+    .controls {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    
+    .btn-custom {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-custom:hover {
+      background-color: #2e59d9;
+      transform: translateY(-2px);
+    }
+    
+    .btn-reset {
+      background-color: var(--danger-color);
+    }
+    
+    .btn-reset:hover {
+      background-color: #d52a1a;
+    }
+    
+    .footer {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem 0;
+      margin-top: 2rem;
+    }
+    
+    .process-label {
+      position: absolute;
+      background-color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .label-evaporation {
+      bottom: 200px;
+      left: 450px;
+    }
+    
+    .label-condensation {
+      top: 150px;
+      left: 250px;
+    }
+    
+    .label-precipitation {
+      top: 200px;
+      left: 400px;
+    }
+    
+    .label-collection {
+      bottom: 160px;
+      left: 200px;
+    }
+    
+    @media (max-width: 768px) {
+      .water-cycle-container {
+        height: 400px;
+      }
+      
+      .sun {
+        width: 60px;
+        height: 60px;
+        right: 50px;
+      }
+      
+      .mountain {
+        border-left: 100px solid transparent;
+        border-right: 100px solid transparent;
+        border-bottom: 150px solid #8b5a2b;
+      }
+      
+      .mountain-2 {
+        border-left: 80px solid transparent;
+        border-right: 80px solid transparent;
+        border-bottom: 130px solid #a67c52;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1><i class="bi bi-droplet-fill me-2"></i> Suvning tabiatda aylanishi</h1>
+        <a href="javascript:history.back()" class="btn btn-outline-light">
+          <i class="bi bi-arrow-left"></i> Orqaga
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container my-4">
+    <div class="visual-container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="text-center mb-4">Suvning tabiatda aylanishi metodikasi</h2>
+          <p class="lead text-center">
+            Bu vizual tushuntirish suvning tabiatda aylanish jarayonini bosqichma-bosqich ko'rsatadi.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step-container">
+        <span class="step-number">1</span>
+        <span class="step-title">Suvning tabiatda aylanishi haqida</span>
+        <p class="explanation-text">
+          Suvning tabiatda aylanishi - bu suvning Yer yuzasidan bug'lanib, atmosferaga ko'tarilishi, bulutlarga aylanishi, yog'inlar shaklida yana Yer yuzasiga qaytishi va daryo, ko'l, dengiz va okeanlarga quyilishi jarayonidir. Bu jarayon uzluksiz davom etadi va tabiatdagi suv miqdorini muvozanatda saqlaydi.
+        </p>
+        
+        <div class="visual-representation">
+          <div class="water-cycle-container" id="waterCycleContainer">
+            <!-- Sun -->
+            <div class="sun">
+              <div class="sun-rays"></div>
+            </div>
+            
+            <!-- Clouds -->
+            <div class="cloud cloud-1"></div>
+            <div class="cloud cloud-2"></div>
+            
+            <!-- Mountains -->
+            <div class="mountain mountain-1">
+              <div class="mountain-snow"></div>
+            </div>
+            <div class="mountain mountain-2">
+              <div class="mountain-snow"></div>
+            </div>
+            
+            <!-- Ocean -->
+            <div class="ocean"></div>
+            
+            <!-- River -->
+            <div class="river"></div>
+            
+            <!-- Rain -->
+            <div class="rain" id="rain"></div>
+            
+            <!-- Evaporation -->
+            <div class="evaporation" id="evaporation"></div>
+            
+            <!-- Process Labels -->
+            <div class="process-label label-evaporation">Bug'lanish</div>
+            <div class="process-label label-condensation">Kondensatsiya</div>
+            <div class="process-label label-precipitation">Yog'in</div>
+            <div class="process-label label-collection">To'planish</div>
+          </div>
+          
+          <div class="controls">
+            <button id="startAnimationButton" class="btn btn-custom me-2">
+              <i class="bi bi-play-fill"></i> Jarayonni ko'rsatish
+            </button>
+            <button id="resetAnimationButton" class="btn btn-custom btn-reset">
+              <i class="bi bi-arrow-counterclockwise"></i> Qayta boshlash
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-container">
+        <span class="step-number">2</span>
+        <span class="step-title">Bug'lanish</span>
+        <p class="explanation-text">
+          Bug'lanish - suvning suyuq holatdan gaz holatiga o'tish jarayoni. Quyosh nuri ta'sirida okean, dengiz, daryo va ko'llardagi suv isiydi va bug'ga aylanadi. O'simliklar ham transpiratsiya jarayonida suvni bug'lantiradi.
+        </p>
+        
+        <div class="visual-representation">
+          <div class="row">
+            <div class="col-md-6">
+              <img src="/placeholder.svg?height=250&width=400&query=water evaporation from ocean with sun rays" alt="Bug'lanish jarayoni" class="img-fluid rounded">
+            </div>
+            <div class="col-md-6">
+              <h5>Bug'lanish jarayoni:</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Quyosh nuri suv yuzasini isitadi</li>
+                <li class="list-group-item">Suv molekulalari energiya olib, tezroq harakatlanadi</li>
+                <li class="list-group-item">Yetarli energiyaga ega bo'lgan suv molekulalari suv yuzasidan ajralib chiqadi</li>
+                <li class="list-group-item">Suv bug'i havoga ko'tariladi</li>
+                <li class="list-group-item">O'simliklar barglaridan ham suv bug'lanadi (transpiratsiya)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-container">
+        <span class="step-number">3</span>
+        <span class="step-title">Kondensatsiya</span>
+        <p class="explanation-text">
+          Kondensatsiya - suv bug'ining sovishi natijasida qayta suyuq holatga o'tish jarayoni. Suv bug'i yuqoriga ko'tarilganda, havo soviydi va suv bug'i mayda suv tomchilariga aylanadi. Bu tomchilar to'planib bulutlarni hosil qiladi.
+        </p>
+        
+        <div class="visual-representation">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Kondensatsiya jarayoni:</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Suv bug'i yuqoriga ko'tariladi</li>
+                <li class="list-group-item">Yuqorida havo sovuq bo'ladi</li>
+                <li class="list-group-item">Suv bug'i soviydi va energiyasini yo'qotadi</li>
+                <li class="list-group-item">Bug' mayda suv tomchilariga aylanadi</li>
+                <li class="list-group-item">Tomchilar to'planib bulutlarni hosil qiladi</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <img src="/placeholder.svg?height=250&width=400&query=water vapor condensation forming clouds" alt="Kondensatsiya jarayoni" class="img-fluid rounded">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-container">
+        <span class="step-number">4</span>
+        <span class="step-title">Yog'in</span>
+        <p class="explanation-text">
+          Yog'in - bulutlardagi suv tomchilari yoki muz kristallari og'irlashib, Yer yuzasiga tushish jarayoni. Yog'in yomg'ir, qor, do'l kabi shakllarda bo'lishi mumkin. Haroratga qarab, yog'inning shakli o'zgaradi.
+        </p>
+        
+        <div class="visual-representation">
+          <div class="row">
+            <div class="col-md-6">
+              <img src="/placeholder.svg?height=250&width=400&query=rain falling from clouds to mountains and land" alt="Yog'in jarayoni" class="img-fluid rounded">
+            </div>
+            <div class="col-md-6">
+              <h5>Yog'in turlari:</h5>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Yomg'ir
+                  <span class="badge bg-primary rounded-pill">0°C dan yuqori</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Qor
+                  <span class="badge bg-primary rounded-pill">0°C dan past</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Do'l
+                  <span class="badge bg-primary rounded-pill">Muzlagan tomchilar</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Tuman
+                  <span class="badge bg-primary rounded-pill">Yer yuzasida kondensatsiya</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Shudring
+                  <span class="badge bg-primary rounded-pill">O'simliklar ustida kondensatsiya</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-container">
+        <span class="step-number">5</span>
+        <span class="step-title">To'planish</span>
+        <p class="explanation-text">
+          To'planish - yog'in natijasida Yer yuzasiga tushgan suvning daryo, ko'l, dengiz va okeanlarga quyilish jarayoni. Suv yer ustidan oqib o'tadi yoki yer ostiga shimiladi va yer osti suvlarini hosil qiladi. Oxir-oqibat, suv yana okean va dengizlarga qaytadi.
+        </p>
+        
+        <div class="visual-representation">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Suvning to'planish yo'llari:</h5>
+              <ul class="list-group">
+                <li class="list-group-item">Yer usti oqimi - suv yer yuzasi bo'ylab oqadi</li>
+                <li class="list-group-item">Infiltratsiya - suv tuproqqa shimiladi</li>
+                <li class="list-group-item">Yer osti suvlari - tuproq ostida to'planadi</li>
+                <li class="list-group-item">Daryolar - suvni okeanlarga olib boradi</li>
+                <li class="list-group-item">Muzliklar - qor va muz shaklida suvni saqlaydi</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <img src="/placeholder.svg?height=250&width=400&query=water collection in rivers and lakes flowing to ocean" alt="To'planish jarayoni" class="img-fluid rounded">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; 2025 MetodCom. Barcha huquqlar himoyalangan.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="text-white text-decoration-none">Bosh sahifa</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get elements
+      const startAnimationButton = document.getElementById('startAnimationButton');
+      const resetAnimationButton = document.getElementById('resetAnimationButton');
+      const rainContainer = document.getElementById('rain');
+      const evaporationContainer = document.getElementById('evaporation');
+      
+      // Create raindrops
+      function createRaindrops() {
+        rainContainer.innerHTML = '';
+        for (let i = 0; i < 20; i++) {
+          const raindrop = document.createElement('div');
+          raindrop.className = 'raindrop';
+          raindrop.style.left = Math.random() * 100 + 'px';
+          raindrop.style.top = Math.random() * 150 + 'px';
+          raindrop.style.animationDelay = Math.random() * 2 + 's';
+          rainContainer.appendChild(raindrop);
+        }
+      }
+      
+      // Create vapor particles
+      function createVaporParticles() {
+        evaporationContainer.innerHTML = '';
+        for (let i = 0; i < 15; i++) {
+          const vapor = document.createElement('div');
+          vapor.className = 'vapor';
+          vapor.style.left = Math.random() * 100 + 'px';
+          vapor.style.bottom = Math.random() * 200 + 'px';
+          vapor.style.opacity = Math.random() * 0.5 + 0.3;
+          evaporationContainer.appendChild(vapor);
+        }
+      }
+      
+      // Animate water cycle
+      function animateWaterCycle() {
+        // Create elements
+        createRaindrops();
+        createVaporParticles();
+        
+        // Show rain
+        rainContainer.style.display = 'block';
+        
+        // Animate raindrops
+        const raindrops = rainContainer.querySelectorAll('.raindrop');
+        raindrops.forEach((raindrop, index) => {
+          setTimeout(() => {
+            raindrop.style.transition = 'top 2s ease-in, opacity 1s ease-out';
+            raindrop.style.top = '150px';
+            raindrop.style.opacity = '0';
+          }, index * 100);
+        });
+        
+        // Show evaporation after rain
+        setTimeout(() => {
+          rainContainer.style.display = 'none';
+          evaporationContainer.style.display = 'block';
+          
+          // Animate vapor particles
+          const vapors = evaporationContainer.querySelectorAll('.vapor');
+          vapors.forEach((vapor, index) => {
+            setTimeout(() => {
+              vapor.style.transition = 'bottom 3s ease-out, opacity 2s ease-in-out';
+              vapor.style.bottom = '300px';
+              vapor.style.opacity = '0';
+            }, index * 200);
+          });
+        }, 3000);
+        
+        // Reset animation after complete cycle
+        setTimeout(() => {
+          evaporationContainer.style.display = 'none';
+        }, 6000);
+      }
+      
+      // Event listeners
+      startAnimationButton.addEventListener('click', animateWaterCycle);
+      
+      resetAnimationButton.addEventListener('click', function() {
+        rainContainer.style.display = 'none';
+        evaporationContainer.style.display = 'none';
+        rainContainer.innerHTML = '';
+        evaporationContainer.innerHTML = '';
+      });
+    });
+  </script>
+</body>
+</html>

@@ -35,7 +35,7 @@ class LessonAdmin(admin.ModelAdmin):
 
 @admin.register(Methodology)
 class MethodologyAdmin(admin.ModelAdmin):
-    list_display = ['title', 'lesson', 'created_at']
+    list_display = ['title', 'lesson', 'created_at','link']
     list_filter = ['lesson__section__subject']
     search_fields = ['title']
 

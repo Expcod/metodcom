@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unli va undosh tovushlar - Vizual tushuntirish</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #f8f9fc;
+      --accent-color: #36b9cc;
+      --success-color: #1cc88a;
+      --warning-color: #f6c23e;
+      --danger-color: #e74a3b;
+      --unli-color: #e74a3b;
+      --undosh-color: #1cc88a;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fc;
+      color: #333;
+    }
+    
+    .header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.5rem 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .visual-container {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+      margin: 2rem 0;
+      padding: 2rem;
+    }
+    
+    .step-container {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border-radius: 8px;
+      background-color: var(--secondary-color);
+      transition: all 0.3s ease;
+    }
+    
+    .step-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .step-number {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      margin-right: 1rem;
+      font-weight: bold;
+    }
+    
+    .step-title {
+      display: inline-block;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+    
+    .interactive-area {
+      background-color: white;
+      border: 2px solid #e3e6f0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .letter {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border-radius: 8px;
+      margin: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid #e3e6f0;
+    }
+    
+    .letter:hover {
+      transform: scale(1.1);
+    }
+    
+    .letter.unli {
+      background-color: var(--unli-color);
+      color: white;
+    }
+    
+    .letter.undosh {
+      background-color: var(--undosh-color);
+      color: white;
+    }
+    
+    .letter.neutral {
+      background-color: white;
+      color: #333;
+    }
+    
+    .explanation-text {
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+    
+    .visual-representation {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      border: 1px solid #e3e6f0;
+    }
+    
+    .controls {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    
+    .btn-custom {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-custom:hover {
+      background-color: #2e59d9;
+      transform: translateY(-2px);
+    }
+    
+    .btn-reset {
+      background-color: var(--danger-color);
+    }
+    
+    .btn-reset:hover {
+      background-color: #d52a1a;
+    }
+    
+    .footer {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem 0;
+      margin-top: 2rem;
+    }
+    
+    .word-container {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    
+    .word-input {
+      font-size: 1.5rem;
+      text-align: center;
+      padding: 0.5rem;
+      border: 2px solid #e3e6f0;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .result-container {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background-color: #eaecf4;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .letter-display {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: bold;
+      border-radius: 8px;
+      margin: 0.25rem;
+    }
+    
+    .category-label {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+    
+    .category-label.unli {
+      background-color: var(--unli-color);
+      color: white;
+    }
+    
+    .category-label.undosh {
+      background-color: var(--undosh-color);
+      color: white;
+    }
+    
+    .mouth-diagram {
+      width: 200px;
+      height: 150px;
+      margin: 0 auto;
+      position: relative;
+      border: 2px solid #333;
+      border-radius: 100px 100px 0 0;
+      background-color: #ffcccc;
+      overflow: hidden;
+    }
+    
+    .tongue {
+      width: 120px;
+      height: 60px;
+      background-color: #ff6666;
+      border-radius: 60px 60px 0 0;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: all 0.5s ease;
+    }
+    
+    .teeth {
+      width: 160px;
+      height: 20px;
+      background-color: white;
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: space-around;
+    }
+    
+    .tooth {
+      width: 15px;
+      height: 20px;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 0 0 5px 5px;
+    }
+    
+    @media (max-width: 768px) {
+      .letter {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 1.25rem;
+        margin: 0.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1><i class="bi bi-chat-square-text me-2"></i> Unli va undosh tovushlar</h1>
+        <a href="javascript:history.back()" class="btn btn-outline-light">
+          <i class="bi bi-arrow-left"></i> Orqaga
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container my-4">
+    <div class="visual-container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="text-center mb-4">Unli va undosh tovushlar metodikasi</h2>
+          <p class="lead text-center">
+            Bu vizual tushuntirish unli va undosh tovushlarni farqlashni bosqichma-bosqich ko'rsatadi.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step-container">
+        <span class="step-number">1</span>
+        <span class="step-title">Unli va undosh tovushlar haqida</span>
+        <p class="explanation-text">
+          O'zbek tilida tovushlar ikki turga bo'linadi: unli va undosh tovushlar. Unli tovushlar ovoz bilan talaffuz qilinadi va ularni talaffuz qilganda havo oqimi og'iz bo'shlig'idan erkin o'tadi. Undosh tovushlar esa ovoz va shovqin yoki faqat shovqin bilan talaffuz qilinadi.
+        </p>
+        
+        <div class="visual-representation">
+          <div class="row">
+            <div class="col-md-6">
+              <h4 class="text-center" style="color: var(--unli-color);">Unli tovushlar</h4>
+              <p class="text-center">O'zbek tilida 6 ta unli tovush mavjud:</p>
+              <div class="d-flex justify-content-center flex-wrap">
+                <div class="letter unli">A</div>
+                <div class="letter unli">O</div>
+                <div class="letter unli">I</div>
+                <div class="letter unli">U</div>
+                <div class="letter unli">O'</div>
+                <div class="letter unli">E</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h4 class="text-center" style="color: var(--undosh-color);">Undosh tovushlar</h4>
+              <p class="text-center">O'zbek tilida 24 ta undosh tovush mavjud:</p>
+              <div class="d-flex justify-content-center flex-wrap">
+                <div class="letter undosh">B</div>
+                <div class="letter undosh">D</div>
+                <div class="letter undosh">F</div>
+                <div class="letter undosh">G</div>
+                <div class="letter undosh">H</div>
+                <div class="letter undosh">J</div>
+                <div class="letter undosh">K</div>
+                <div class="letter undosh">L</div>
+                <div class="letter undosh">M</div>
+                <div class="letter undosh">N</div>
+                <div class="letter undosh">P</div>
+                <div class="letter undosh">Q</div>
+                <div class="letter undosh">R</div>
+                <div class="letter undosh">S</div>
+                <div class="letter undosh">T</div>
+                <div class="letter undosh">V</div>
+                <div class="letter undosh">X</div>
+                <div class="letter undosh">Y</div>
+                <div class="letter undosh">Z</div>
+                <div class="letter undosh">SH</div>
+                <div class="letter undosh">CH</div>
+                <div class="letter undosh">NG</div>
+                <div class="letter undosh">G'</div>
+                <div class="letter undosh">'</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-container">
+        <span class="step-number">2</span>
+        <span class="step-title">Unli tovushlarning talaffuzi</span>
+        <p class="explanation-text">
+          Unli tovushlarni talaffuz qilganda og'iz bo'shlig'ida havo oqimi erkin o'tadi. Unli tovushlar faqat ovoz bilan talaffuz qilinadi.
+        </p>
+        
+        <div class="visual-representation">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mouth-diagram" id="unliMouthDiagram">
+                <div class="teeth">
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                </div>
+                <div class="tongue" style="height: 30px;"></div>
+              </div>
+              <p class="text-center mt-3">
+                Unli tovushlarni talaffuz qilganda og'iz ochiq bo'ladi va havo erkin o'tadi.
+              </p>
+            </div>
+            <div class="col-md-6">
+              <div class="interactive-area">
+                <h5 class="text-center">Unli tovushni tanlang:</h5>
+                <div class="d-flex justify-content-center flex-wrap">
+                  <div class="letter unli" onclick="showUnliPronunciation('A')">A</div>
+                  <div class="letter unli" onclick="showUnliPronunciation('O')">O</div>
+                  <div class="letter unli" onclick="showUnliPronunciation('I')">I</div>
+                  <div class="letter unli" onclick="showUnliPronunciation('U')">U</div>
+                  <div class="letter unli" onclick="showUnliPronunciation('O\'')">O'</div>
+                  <div class="letter unli" onclick="showUnliPronunciation('E')">E</div>
+                </div>
+                <div class="result-container" id="unliResult">
+                  <h5>Tovush: <span id="selectedUnli">-</span></h5>
+                  <p id="unliDescription">Unli tovushni tanlang.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-container">
+        <span class="step-number">3</span>
+        <span class="step-title">Undosh tovushlarning talaffuzi</span>
+        <p class="explanation-text">
+          Undosh tovushlarni talaffuz qilganda og'iz bo'shlig'ida havo oqimi to'siqqa uchraydi. Undosh tovushlar ovoz va shovqin yoki faqat shovqin bilan talaffuz qilinadi.
+        </p>
+        
+        <div class="visual-representation">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mouth-diagram" id="undoshMouthDiagram">
+                <div class="teeth">
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                  <div class="tooth"></div>
+                </div>
+                <div class="tongue" style="height: 60px;"></div>
+              </div>
+              <p class="text-center mt-3">
+                Undosh tovushlarni talaffuz qilganda og'izda to'siq hosil bo'ladi.
+              </p>
+            </div>
+            <div class="col-md-6">
+              <div class="interactive-area">
+                <h5 class="text-center">Undosh tovushni tanlang:</h5>
+                <div class="d-flex justify-content-center flex-wrap">
+                  <div class="letter undosh" onclick="showUndoshPronunciation('B')">B</div>
+                  <div class="letter undosh" onclick="showUndoshPronunciation('D')">D</div>
+                  <div class="letter undosh" onclick="showUndoshPronunciation('M')">M</div>
+                  <div class="letter undosh" onclick="showUndoshPronunciation('N')">N</div>
+                  <div class="letter undosh" onclick="showUndoshPronunciation('R')">R</div>
+                  <div class="letter undosh" onclick="showUndoshPronunciation('S')">S</div>
+                </div>
+                <div class="result-container" id="undoshResult">
+                  <h5>Tovush: <span id="selectedUndosh">-</span></h5>
+                  <p id="undoshDescription">Undosh tovushni tanlang.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-container">
+        <span class="step-number">4</span>
+        <span class="step-title">So'zlarda unli va undosh tovushlarni aniqlash</span>
+        <p class="explanation-text">
+          So'zlarda unli va undosh tovushlarni aniqlash uchun har bir harfni alohida ko'rib chiqish kerak. Quyidagi interaktiv mashqda so'z kiritib, undagi unli va undosh tovushlarni aniqlashingiz mumkin.
+        </p>
+        
+        <div class="interactive-area">
+          <div class="word-container">
+            <label for="wordInput" class="form-label">So'z kiriting:</label>
+            <input type="text" id="wordInput" class="word-input" placeholder="Masalan: kitob">
+            <button id="analyzeButton" class="btn btn-custom mt-3">
+              <i class="bi bi-search"></i> Tahlil qilish
+            </button>
+          </div>
+          
+          <div class="result-container" id="wordResult">
+            <h5>Tahlil natijasi:</h5>
+            <div id="letterAnalysis" class="d-flex justify-content-center flex-wrap">
+              <!-- Letters will be displayed here -->
+            </div>
+            <div class="mt-3">
+              <p>Unli tovushlar: <span id="unliCount">0</span></p>
+              <p>Undosh tovushlar: <span id="undoshCount">0</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-container">
+        <span class="step-number">5</span>
+        <span class="step-title">Qo'shimcha misollar</span>
+        <p class="explanation-text">
+          Quyida unli va undosh tovushlar bo'yicha qo'shimcha misollar keltirilgan:
+        </p>
+        
+        <div class="visual-representation">
+          <div class="row">
+            <div class="col-md-6">
+              <h5 class="text-center" style="color: var(--unli-color);">Unli tovushlar ko'p bo'lgan so'zlar</h5>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Oila
+                  <span class="badge bg-primary rounded-pill">3 ta unli</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Aeroport
+                  <span class="badge bg-primary rounded-pill">4 ta unli</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Auditoriya
+                  <span class="badge bg-primary rounded-pill">6 ta unli</span>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h5 class="text-center" style="color: var(--undosh-color);">Undosh tovushlar ko'p bo'lgan so'zlar</h5>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Maktab
+                  <span class="badge bg-success rounded-pill">4 ta undosh</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Transport
+                  <span class="badge bg-success rounded-pill">7 ta undosh</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Konstruksiya
+                  <span class="badge bg-success rounded-pill">7 ta undosh</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; 2025 MetodCom. Barcha huquqlar himoyalangan.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="text-white text-decoration-none">Bosh sahifa</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JavaScript -->
+  <script>
+    // Unli tovushlar
+    const unliTovushlar = ['A', 'O', 'I', 'U', 'O\'', 'E'];
+    
+    // Undosh tovushlar
+    const undoshTovushlar = ['B', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z', 'SH', 'CH', 'NG', 'G\'', '\''];
+    
+    // Unli tovush talaffuzi
+    function showUnliPronunciation(unli) {
+      document.getElementById('selectedUnli').textContent = unli;
+      
+      let description = '';
+      let tongueHeight = 30;
+      
+      switch(unli) {
+        case 'A':
+          description = 'A - orqa qator, quyi ko\'tarilish, lablanmagan unli tovush.';
+          tongueHeight = 20;
+          break;
+        case 'O':
+          description = 'O - orqa qator, o\'rta ko\'tarilish, lablangan unli tovush.';
+          tongueHeight = 30;
+          break;
+        case 'I':
+          description = 'I - old qator, yuqori ko\'tarilish, lablanmagan unli tovush.';
+          tongueHeight = 50;
+          break;
+        case 'U':
+          description = 'U - orqa qator, yuqori ko\'tarilish, lablangan unli tovush.';
+          tongueHeight = 45;
+          break;
+        case 'O\'':
+          description = 'O\' - orqa qator, o\'rta ko\'tarilish, lablangan unli tovush.';
+          tongueHeight = 35;
+          break;
+        case 'E':
+          description = 'E - old qator, o\'rta ko\'tarilish, lablanmagan unli tovush.';
+          tongueHeight = 40;
+          break;
+      }
+      
+      document.getElementById('unliDescription').textContent = description;
+      document.querySelector('#unliMouthDiagram .tongue').style.height = tongueHeight + 'px';
+    }
+    
+    // Undosh tovush talaffuzi
+    function showUndoshPronunciation(undosh) {
+      document.getElementById('selectedUndosh').textContent = undosh;
+      
+      let description = '';
+      let tongueHeight = 60;
+      
+      switch(undosh) {
+        case 'B':
+          description = 'B - lab-lab, portlovchi, jarangli undosh tovush.';
+          tongueHeight = 50;
+          break;
+        case 'D':
+          description = 'D - til oldi, portlovchi, jarangli undosh tovush.';
+          tongueHeight = 70;
+          break;
+        case 'M':
+          description = 'M - lab-lab, burun, sonor undosh tovush.';
+          tongueHeight = 55;
+          break;
+        case 'N':
+          description = 'N - til oldi, burun, sonor undosh tovush.';
+          tongueHeight = 65;
+          break;
+        case 'R':
+          description = 'R - til oldi, titroq, sonor undosh tovush.';
+          tongueHeight = 60;
+          break;
+        case 'S':
+          description = 'S - til oldi, sirg\'aluvchi, jarangsiz undosh tovush.';
+          tongueHeight = 75;
+          break;
+      }
+      
+      document.getElementById('undoshDescription').textContent = description;
+      document.querySelector('#undoshMouthDiagram .tongue').style.height = tongueHeight + 'px';
+    }
+    
+    // So'zni tahlil qilish
+    document.getElementById('analyzeButton').addEventListener('click', function() {
+      const word = document.getElementById('wordInput').value.toUpperCase();
+      const letterAnalysis = document.getElementById('letterAnalysis');
+      letterAnalysis.innerHTML = '';
+      
+      let unliCount = 0;
+      let undoshCount = 0;
+      
+      for (let i = 0; i < word.length; i++) {
+        const letter = word[i];
+        const letterDisplay = document.createElement('div');
+        letterDisplay.className = 'letter-display';
+        letterDisplay.textContent = letter;
+        
+        const categoryLabel = document.createElement('span');
+        categoryLabel.className = 'category-label';
+        
+        if (unliTovushlar.includes(letter)) {
+          letterDisplay.style.backgroundColor = 'var(--unli-color)';
+          letterDisplay.style.color = 'white';
+          categoryLabel.textContent = 'Unli';
+          categoryLabel.classList.add('unli');
+          unliCount++;
+        } else if (undoshTovushlar.includes(letter)) {
+          letterDisplay.style.backgroundColor = 'var(--undosh-color)';
+          letterDisplay.style.color = 'white';
+          categoryLabel.textContent = 'Undosh';
+          categoryLabel.classList.add('undosh');
+          undoshCount++;
+        } else {
+          letterDisplay.style.backgroundColor = '#eaecf4';
+          letterDisplay.style.color = '#333';
+          categoryLabel.textContent = '-';
+        }
+        
+        const letterContainer = document.createElement('div');
+        letterContainer.className = 'd-flex flex-column align-items-center mx-2 mb-3';
+        letterContainer.appendChild(letterDisplay);
+        letterContainer.appendChild(categoryLabel);
+        
+        letterAnalysis.appendChild(letterContainer);
+      }
+      
+      document.getElementById('unliCount').textContent = unliCount;
+      document.getElementById('undoshCount').textContent = undoshCount;
+    });
+  </script>
+</body>
+</html>
