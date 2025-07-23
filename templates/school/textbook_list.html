@@ -91,20 +91,33 @@
                     </div>
                     <div class="card-body">
                       <h5 class="card-title">{{ textbook.title }}</h5>
-                      <p class="card-text">{{ textbook.description|truncatewords:20 }}</p>
-                      <div class="textbook-meta">
-                        <span class="textbook-author">
-                          <i class="bi bi-person"></i> {{ textbook.author|default:"Muallif ko'rsatilmagan" }}
-                        </span>
-                        <span class="textbook-year">
-                          <i class="bi bi-calendar"></i> {{ textbook.year|default:"Yil ko'rsatilmagan" }}
+                      <div class="mb-3">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                          {{ textbook.subject.name }}
                         </span>
                       </div>
+                      <p class="card-text text-muted">
+                        {{ textbook.subject.name }} fani uchun metodik qo'llanmalar va resurslar to'plami. O'qituvchilar uchun foydali materiallar.
+                      </p>
                     </div>
-                    <div class="card-footer">
-                      <a href="{% url 'maktab:textbook_detail' textbook.id 0 %}" class="btn btn-primary w-100">
-                        <i class="bi bi-book"></i> Darslikni Ko'rish
-                      </a>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                      {% if textbook.subject.sections.exists %}
+                        <div class="row g-2">
+                          {% for section in textbook.subject.sections.all %}
+                            <div class="col-6">
+                              <a href="{% url 'maktab:textbook_detail' textbook.id section.id %}" class="btn btn-primary btn-sm w-100">
+                                <i class="bi bi-book"></i> {{ section.name }}
+                              </a>
+                            </div>
+                          {% endfor %}
+                        </div>
+                      {% else %}
+                        <div class="text-center">
+                          <a href="{% url 'maktab:textbook_detail' textbook.id 0 %}" class="btn btn-primary w-100">
+                            <i class="bi bi-book"></i> Darslikni Ko'rish
+                          </a>
+                        </div>
+                      {% endif %}
                     </div>
                   </div>
                 </div>

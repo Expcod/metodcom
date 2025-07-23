@@ -110,16 +110,22 @@ def textbook_list(request):
     return render(request, 'school/textbook_list.html', {'textbooks': textbooks})
 
 @login_required
-def textbook_detail(request, textbook_id, lesson_id):
+def textbook_detail(request, textbook_id, section_id):
     textbook = get_object_or_404(Textbook, id=textbook_id)
-    lesson = get_object_or_404(Lesson, id=lesson_id)
-    page = TextbookPage.objects.filter(textbook=textbook, lesson=lesson).first()
-    methodologies = Methodology.objects.filter(lesson=lesson)
+    
+    if section_id == 0:
+        # Agar section_id 0 bo'lsa, birinchi sectionni olish
+        section = textbook.subject.sections.first()
+    else:
+        section = get_object_or_404(Section, id=section_id)
+    
+    # Section ga tegishli darslarni olish
+    lessons = section.lessons.all() if section else []
+    
     return render(request, 'school/textbook_detail.html', {
         'textbook': textbook,
-        'lesson': lesson,
-        'page': page,
-        'methodologies': methodologies
+        'section': section,
+        'lessons': lessons,
     })
 
 # Authentication Views

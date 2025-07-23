@@ -15,7 +15,7 @@ urlpatterns = [
     
     # Darsliklar URLs
     path('textbooks/', views.textbook_list, name='textbook_list'),
-    path('textbooks/<int:textbook_id>/lesson/<int:lesson_id>/', views.textbook_detail, name='textbook_detail'),
+    path('textbooks/<int:textbook_id>/section/<int:section_id>/', views.textbook_detail, name='textbook_detail'),
     
     # Vazifalar URLs
     path('tasks/', views.task_list, name='task_list'),  # Sinflar ro'yxati
