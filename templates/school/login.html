@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Metodcom | Kirish</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="{% static 'css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
+    <link href="{% static 'css/style.css' %}" rel='stylesheet' type='text/css' />	
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <link href='https://fonts.googleapis.com/css?family=Arvo:400,700,400italic|PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #12507B 0%, #1e6b96 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+        .auth-form h2 {
+            color: #12507B;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 10px;
+            font-family: 'Arvo', serif;
+        }
+        .auth-form .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            color: #12507B;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus {
+            border-color: #12507B;
+            outline: none;
+            box-shadow: 0 0 10px rgba(18, 80, 123, 0.1);
+        }
+        .btn-login {
+            width: 100%;
+            background: #12507B;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn-login:hover {
+            background: #0d3d5f;
+            transform: translateY(-2px);
+        }
+        .auth-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .auth-links a {
+            color: #12507B;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-section h1 {
+            color: #12507B;
+            font-family: 'Arvo', serif;
+            font-size: 3em;
+            margin: 0;
+        }
+        .logo-section span {
+            color: #fff200;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .auth-form {
+                padding: 30px 20px;
+            }
+            .logo-section h1 {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form">
+            <div class="logo-section">
+                <h1>Metod<span>com</span></h1>
+            </div>
+            <h2>Kirish</h2>
+            <p class="subtitle">Hisobingizga kiring</p>
+            
+                        {% if messages %}
+                {% for message in messages %}
+                    <div class="error-message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Telefon raqam</label>
+                    <input type="text" id="username" name="username" placeholder="+998 90 123 45 67" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Parol</label>
+                    <input type="password" id="password" name="password" placeholder="Parolni kiriting" required>
+                </div>
+                
+                <button type="submit" class="btn-login">Kirish</button>
+            </form>
+            
+            <div class="auth-links">
+                <p>Hisobingiz yo'qmi? <a href="{% url 'maktab:register' %}">Ro'yxatdan o'ting</a></p>
+                <p><a href="{% url 'maktab:home' %}">Bosh sahifaga qaytish</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

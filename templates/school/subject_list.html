@@ -91,17 +91,22 @@
                       </p>
                     </div>
                     <div class="card-footer bg-transparent border-0 pb-3">
-                      {% for section in subject.sections.all %}
-                        <a href="{% url 'maktab:lesson_list' section.id %}" class="btn btn-primary w-100 d-flex align-items-center justify-content-center mb-2">
-                          <span>{{ section.name }}</span>
-                          <i class="bi bi-book ms-2 btn-icon"></i>
-                        </a>
-                      {% empty %}
-                        <div class="alert alert-warning text-center">
-                          <i class="bi bi-exclamation-triangle me-2"></i>
-                          Bo'limlar mavjud emas
+                      {% if subject.sections.exists %}
+                        <div class="row g-2">
+                          {% for section in subject.sections.all %}
+                            <div class="col-6">
+                              <a href="{% url 'maktab:lesson_list' section.id %}" class="btn btn-outline-primary btn-sm w-100">
+                                {{ section.name }}
+                              </a>
+                            </div>
+                          {% endfor %}
                         </div>
-                      {% endfor %}
+                      {% else %}
+                        <div class="text-center text-muted">
+                          <i class="bi bi-info-circle me-1"></i>
+                          <small>Bo'limlar mavjud emas</small>
+                        </div>
+                      {% endif %}
                     </div>
                   </div>
                 </div>

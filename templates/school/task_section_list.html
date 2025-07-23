@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject.name }} - Qismlar | Metodcom</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/lesson_list.css' %}" rel="stylesheet">
+    <style>
+      .section-list-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        min-height: 100vh;
+        padding-top: 120px;
+      }
+      .section-header {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+      }
+      .section-card {
+        transition: all 0.3s ease;
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      }
+      .section-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      }
+      .card-accent {
+        height: 5px;
+        width: 100%;
+      }
+      .section-item {
+        margin-bottom: 1.5rem;
+      }
+      .sections-empty {
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      }
+      .sections-empty-icon {
+        font-size: 4rem;
+        color: #ffc107;
+        margin-bottom: 1rem;
+      }
+      .search-box {
+        position: relative;
+        margin-bottom: 2rem;
+      }
+      .search-input {
+        border-radius: 25px;
+        border: 2px solid #e9ecef;
+        padding: 12px 50px 12px 20px;
+        transition: all 0.3s ease;
+      }
+      .search-input:focus {
+        border-color: #ffc107;
+        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+      }
+      .search-btn {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: #ffc107;
+        color: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn-icon {
+        font-size: 1rem;
+      }
+    </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="fixed-top">
+    <div class="header-container">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'maktab:home' %}">Metodcom</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'maktab:home' %}">Bosh sahifa</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'maktab:metodikalar' %}">Metodikalar</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'maktab:task_list' %}">Vazifalar</a>
+              </li>
+            </ul>
+            <ul class="navbar-nav">
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'maktab:logout' %}">Chiqish</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'maktab:login' %}">Kirish</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'maktab:register' %}">Ro'yxatdan o'tish</a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="section-list-container">
+      <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'maktab:home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'maktab:task_list' %}">Vazifalar</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'maktab:task_subject_list' subject.grade.id %}">{{ subject.grade.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ subject.name }}</li>
+          </ol>
+        </nav>
+
+        <!-- Header -->
+        <div class="section-header">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h1 class="h2 fw-bold text-primary mb-2">{{ subject.name }} - Qismlar</h1>
+              <p class="text-muted mb-0">{{ subject.grade.name }} sinfi uchun {{ subject.name }} fanining qismlari</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+              <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                <i class="bi bi-list-ul me-1"></i>
+                {{ sections.count }} qism
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-box">
+          <input type="text" class="form-control search-input" id="searchInput" placeholder="Qismlarni qidirish...">
+          <button type="button" class="search-btn">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+
+        <!-- Sections Grid -->
+        {% if sections %}
+          <div class="sections-grid">
+            <div class="row g-4">
+              {% for section in sections %}
+                <div class="col-md-6 col-lg-4 section-item" data-section-name="{{ section.name|lower }}">
+                  <div class="card h-100 section-card">
+                    <div class="card-accent bg-warning"></div>
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold mb-3">{{ section.name }}</h5>
+                      <div class="mb-3">
+                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-2 rounded-pill">
+                          {{ section.lessons.count }} dars
+                        </span>
+                      </div>
+                      <p class="card-text text-muted">
+                        {{ section.name }} qismi bo'yicha darslar va vazifalar. Bolangizning bilimini mustahkamlash uchun foydali materiallar.
+                      </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                      <a href="{% url 'maktab:task_lesson_list' section.id %}" class="btn btn-warning w-100 d-flex align-items-center justify-content-center">
+                        <span>Darslarni Ko'rish</span>
+                        <i class="bi bi-journal-text ms-2 btn-icon"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <div class="sections-empty">
+            <div class="sections-empty-icon">
+              <i class="bi bi-journal-x"></i>
+            </div>
+            <h3 class="sections-empty-title">Qismlar topilmadi</h3>
+            <p class="sections-empty-text">Ushbu fan uchun hozircha qismlar mavjud emas.</p>
+          </div>
+        {% endif %}
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons mt-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <a href="{% url 'maktab:task_subject_list' subject.grade.id %}" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-arrow-left me-2"></i>
+                Fanlar ro'yxatiga qaytish
+              </a>
+            </div>
+            <div class="col-md-6">
+              <a href="{% url 'maktab:task_list' %}" class="btn btn-primary w-100">
+                <i class="bi bi-house me-2"></i>
+                Vazifalar bo'limiga qaytish
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Search functionality
+      const searchInput = document.getElementById('searchInput');
+      const sectionItems = document.querySelectorAll('.section-item');
+
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        sectionItems.forEach(function(item) {
+          const sectionName = item.getAttribute('data-section-name');
+          if (sectionName.includes(searchTerm)) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+      
+      // Search button functionality
+      document.querySelector('.search-btn').addEventListener('click', function() {
+        searchInput.focus();
+      });
+    });
+  </script>
+</body>
+</html>

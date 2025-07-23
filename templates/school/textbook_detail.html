@@ -30,9 +30,11 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'maktab:home' %}">Bosh sahifa</a>
           </li>
+          {% if user.role == 'teacher' %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'maktab:grade_list' %}">Metodikalar</a>
           </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'maktab:textbook_list' %}">Darsliklar</a>
           </li>

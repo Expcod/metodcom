@@ -8,7 +8,7 @@ SECRET_KEY = '90h8x=sd(as9c#)y)u3um_47bp)$i2-0dwsf5y_7e2r=r=$dtv'  # Replace wit
 
 DEBUG = True  # Set to False in production
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'maktab',  # Your app
+    'feedback',  # Feedback app
 ]
 
 MIDDLEWARE = [
@@ -86,5 +87,13 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Custom User Model
+AUTH_USER_MODEL = 'maktab.CustomUser'
+
+# Login URLs
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

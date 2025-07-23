@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ subject.name }} - Vazifalar</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/lesson_list.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'maktab:home' %}">
+        <i class="bi bi-mortarboard-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+        <span class="fw-bold">Metod<span class="text-primary">com</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:home' %}">Bosh sahifa</a>
+          </li>
+          {% if user.role == 'teacher' %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:grade_list' %}">Metodikalar</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:textbook_list' %}">Darsliklar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'maktab:task_list' %}">Vazifalar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="lesson-container">
+      <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'maktab:home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'maktab:task_list' %}">Vazifalar</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'maktab:task_subject_list' grade.id %}">{{ grade.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ section.name }}</li>
+          </ol>
+        </nav>
+
+        <!-- Header -->
+        <div class="lesson-header">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h1 class="lesson-title">
+                <i class="bi bi-clipboard-check-fill text-success me-2"></i>
+                {{ section.name }} - Vazifalar
+              </h1>
+              <p class="lesson-description">{{ section.name }} bo'limi bo'yicha uy vazifalari va qo'shimcha mashqlar</p>
+            </div>
+            <div class="col-md-4">
+              <div class="search-container">
+                <input type="text" id="taskSearch" class="form-control" placeholder="Vazifani qidirish...">
+                <i class="bi bi-search search-icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tasks List -->
+        <div class="lessons-list-container">
+          <div class="lessons-list-header">
+            <h2 class="lessons-list-title">Vazifalar ro'yxati</h2>
+            <div class="lessons-count">Jami: <span class="badge bg-success">{{ tasks|length }}</span> vazifa</div>
+          </div>
+
+          {% if tasks %}
+            <div class="lessons-list">
+              {% for task in tasks %}
+                <div class="lesson-item" data-lesson-title="{{ task.title|lower }}">
+                  <div class="lesson-number">
+                    <i class="bi bi-clipboard-check text-success"></i>
+                  </div>
+                  <div class="lesson-content">
+                    <h3 class="lesson-item-title">{{ task.title }}</h3>
+                    <p class="lesson-item-description">{{ task.description|truncatechars:120 }}</p>
+                    <div class="lesson-meta">
+                      <span class="lesson-methodology-count">
+                        <i class="bi bi-book"></i> {{ task.lesson.title }}
+                      </span>
+                      
+                      <span class="lesson-page">
+                        <i class="bi bi-clock"></i> {{ task.time_estimate }} daqiqa
+                      </span>
+                      
+                      <span class="badge bg-{% if task.difficulty == 'easy' %}success{% elif task.difficulty == 'medium' %}warning{% else %}danger{% endif %}-subtle text-{% if task.difficulty == 'easy' %}success{% elif task.difficulty == 'medium' %}warning{% else %}danger{% endif %}">
+                        {% if task.difficulty == 'easy' %}Oson
+                        {% elif task.difficulty == 'medium' %}O'rta
+                        {% elif task.difficulty == 'hard' %}Qiyin{% endif %}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="lesson-actions">
+                    <a href="{% url 'maktab:task_detail' task.id %}" class="btn btn-outline-success btn-sm">
+                      <i class="bi bi-eye"></i> Ko'rish
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="lessons-empty">
+              <div class="lessons-empty-icon">
+                <i class="bi bi-clipboard-x"></i>
+              </div>
+              <h3 class="lessons-empty-title">Vazifalar topilmadi</h3>
+              <p class="lessons-empty-text">Ushbu fan uchun hozircha vazifalar mavjud emas.</p>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+          <a href="{% url 'maktab:task_subject_list' grade.id %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Orqaga
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-light py-4 mt-auto border-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; {% now "Y" %} MetodCom. Barcha huquqlar himoyalangan.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="text-decoration-none text-muted me-3">Foydalanish shartlari</a>
+          <a href="#" class="text-decoration-none text-muted">Bog'lanish</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('taskSearch');
+      const taskItems = document.querySelectorAll('.lesson-item');
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        
+        taskItems.forEach(item => {
+          const taskTitle = item.getAttribute('data-lesson-title');
+          if (taskTitle.includes(searchTerm)) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

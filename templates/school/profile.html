@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Metodcom | Profil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="{% static 'css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
+    <link href="{% static 'css/style.css' %}" rel='stylesheet' type='text/css' />	
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <link href='https://fonts.googleapis.com/css?family=Arvo:400,700,400italic|PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <style>
+        .profile-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 50px 20px;
+        }
+        .profile-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #12507B;
+        }
+        .profile-header h2 {
+            color: #12507B;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-family: 'Arvo', serif;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .form-group label {
+            color: #12507B;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #12507B;
+            outline: none;
+            box-shadow: 0 0 10px rgba(18, 80, 123, 0.1);
+        }
+        .btn-update {
+            background: #12507B;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-update:hover {
+            background: #0d3d5f;
+            transform: translateY(-2px);
+        }
+        .btn-back {
+            background: #6c757d;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 15px;
+        }
+        .btn-back:hover {
+            background: #545b62;
+            color: white;
+            text-decoration: none;
+        }
+        .user-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .user-info h4 {
+            color: #12507B;
+            margin-bottom: 15px;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .profile-form {
+                padding: 30px 20px;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .btn-back, .btn-update {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-form">
+            <div class="profile-header">
+                <h2>Profil Ma'lumotlari</h2>
+                <p>Qo'shimcha ma'lumotlaringizni to'ldiring</p>
+            </div>
+            
+            <div class="user-info">
+                <h4>Asosiy ma'lumotlar:</h4>
+                <p><strong>Ism:</strong> {{ user.first_name }}</p>
+                <p><strong>Familiya:</strong> {{ user.last_name }}</p>
+                <p><strong>Telefon:</strong> {{ user.phone_number }}</p>
+                <p><strong>Rol:</strong> 
+                    {% if user.role == 'teacher' %}
+                        <span style="color: #28a745; font-weight: bold;">O'qituvchi</span>
+                    {% elif user.role == 'parent' %}
+                        <span style="color: #ffc107; font-weight: bold;">Ota-ona</span>
+                    {% else %}
+                        <span style="color: #6c757d;">Belgilanmagan</span>
+                    {% endif %}
+                </p>
+                <p><strong>Ro'yxatdan o'tgan:</strong> {{ user.created_at|date:"d.m.Y H:i" }}</p>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                    <em>Rol ma'lumotini faqat administrator o'zgartirishi mumkin.</em>
+                </p>
+            </div>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="birth_date">Tug'ilgan sana</label>
+                        <input type="date" id="birth_date" name="birth_date" value="{{ user.birth_date|date:'Y-m-d' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="birth_place">Tug'ilgan joy</label>
+                        <input type="text" id="birth_place" name="birth_place" placeholder="Tug'ilgan joyingiz" value="{{ user.birth_place }}">
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="{% url 'maktab:home' %}" class="btn-back">Orqaga</a>
+                    <button type="submit" class="btn-update">Ma'lumotlarni Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

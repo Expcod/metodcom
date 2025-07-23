@@ -1,0 +1,372 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Metodcom | Ro'yxatdan o'tish</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="{% static 'css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
+    <link href="{% static 'css/style.css' %}" rel='stylesheet' type='text/css' />	
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <link href='https://fonts.googleapis.com/css?family=Arvo:400,700,400italic|PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #12507B 0%, #1e6b96 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            max-width: 550px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+        .auth-form h2 {
+            color: #12507B;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 10px;
+            font-family: 'Arvo', serif;
+        }
+        .auth-form .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            flex: 1;
+            position: relative;
+        }
+        .form-group.full-width {
+            flex: none;
+            width: 100%;
+        }
+        .form-group label {
+            color: #12507B;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #12507B;
+            outline: none;
+            box-shadow: 0 0 10px rgba(18, 80, 123, 0.1);
+        }
+        .btn-register {
+            width: 100%;
+            background: #12507B;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn-register:hover {
+            background: #0d3d5f;
+            transform: translateY(-2px);
+        }
+        .auth-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .auth-links a {
+            color: #12507B;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        }
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-section h1 {
+            color: #12507B;
+            font-family: 'Arvo', serif;
+            font-size: 3em;
+            margin: 0;
+        }
+        .logo-section span {
+            color: #fff200;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        /* Step Guide Styles */
+        .step-guide {
+            position: absolute;
+            background: #12507B;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            max-width: 250px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+        }
+        .step-guide::after {
+            content: '';
+            position: absolute;
+            border: 10px solid transparent;
+            border-top-color: #12507B;
+            bottom: -20px;
+            left: 20px;
+        }
+        .step-guide.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+        .help-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #12507B;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .role-description {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .auth-form {
+                padding: 30px 20px;
+            }
+            .logo-section h1 {
+                font-size: 2.5em;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+            text-decoration: underline;
+        }
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-section h1 {
+            color: #12507B;
+            font-family: 'Arvo', serif;
+            font-size: 3em;
+            margin: 0;
+        }
+        .logo-section span {
+            color: #fff200;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .auth-form {
+                padding: 30px 20px;
+            }
+            .logo-section h1 {
+                font-size: 2.5em;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form">
+            <div class="logo-section">
+                <h1>Metod<span>com</span></h1>
+            </div>
+            <h2>Ro'yxatdan o'tish</h2>
+            <p class="subtitle">Yangi hisob yarating</p>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name">Ism</label>
+                        <input type="text" id="first_name" name="first_name" placeholder="Ismingizni kiriting" required>
+                        <span class="help-icon" data-help="first_name">❓</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Familiya</label>
+                        <input type="text" id="last_name" name="last_name" placeholder="Familiyangizni kiriting" required>
+                        <span class="help-icon" data-help="last_name">❓</span>
+                    </div>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="role">Saytimizga kim sifatida tashrif buyurdingiz?</label>
+                    <select id="role" name="role" required>
+                        <option value="">Rolni tanlang</option>
+                        <option value="teacher">O'qituvchi</option>
+                        <option value="parent">Ota-ona</option>
+                    </select>
+                    <div class="role-description" id="role-desc"></div>
+                    <span class="help-icon" data-help="role">❓</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone_number">Telefon raqam</label>
+                    <input type="tel" id="phone_number" name="phone_number" placeholder="+998 90 123 45 67" required>
+                    <span class="help-icon" data-help="phone">❓</span>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password1">Parol</label>
+                        <input type="password" id="password1" name="password1" placeholder="Parolni kiriting" required>
+                        <span class="help-icon" data-help="password1">❓</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">Parolni tasdiqlash</label>
+                        <input type="password" id="password2" name="password2" placeholder="Parolni qayta kiriting" required>
+                        <span class="help-icon" data-help="password2">❓</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-register">Ro'yxatdan o'tish</button>
+            </form>
+            
+            <div class="auth-links">
+                <p>Hisobingiz bormi? <a href="{% url 'maktab:login' %}">Kirish</a></p>
+                <p><a href="{% url 'maktab:home' %}">Bosh sahifaga qaytish</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step Guide Tooltips -->
+    <div id="step-guide" class="step-guide"></div>
+
+    <script>
+        $(document).ready(function() {
+            const guides = {
+                first_name: "Bu yerga haqiqiy ismingizni yozing. Masalan: Ahmad",
+                last_name: "Bu yerga familiyangizni yozing. Masalan: Karimov",
+                role: "Agar siz o'qituvchi bo'lsangiz, barcha bo'limlarga kirish huquqingiz bo'ladi. Ota-ona bo'lsangiz, faqat darsliklar va vazifalar bo'limiga kira olasiz.",
+                phone: "Telefon raqamingizni to'liq kiriting. Bu sizning login ma'lumotingiz bo'ladi. Masalan: +998901234567",
+                password1: "Kuchli parol o'ylab toping. Kamida 8 ta belgi bo'lishi kerak.",
+                password2: "Yuqorida kiritgan parolingizni qayta yozing."
+            };
+
+            // Help icons
+            $('.help-icon').on('click', function() {
+                const helpType = $(this).data('help');
+                const guide = guides[helpType];
+                const $stepGuide = $('#step-guide');
+                const iconPos = $(this).offset();
+                
+                $stepGuide.text(guide);
+                $stepGuide.css({
+                    top: iconPos.top - $stepGuide.outerHeight() - 30,
+                    left: iconPos.left - 100
+                }).addClass('show');
+                
+                setTimeout(() => {
+                    $stepGuide.removeClass('show');
+                }, 4000);
+            });
+
+            // Role change handler
+            $('#role').on('change', function() {
+                const role = $(this).val();
+                const $desc = $('#role-desc');
+                
+                if (role === 'teacher') {
+                    $desc.text('O\'qituvchi sifatida siz metodikalar va vazifalar bo\'limlariga to\'liq kirish huquqiga ega bo\'lasiz.');
+                    $desc.css('color', '#28a745');
+                } else if (role === 'parent') {
+                    $desc.text('Ota-ona sifatida siz faqat darsliklar va vazifalar bo\'limlaridan foydalana olasiz.');
+                    $desc.css('color', '#ffc107');
+                }
+            });
+
+            // Hide guide on click outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).hasClass('help-icon')) {
+                    $('#step-guide').removeClass('show');
+                }
+            });
+
+            // Auto-show first guide
+            setTimeout(() => {
+                $('.help-icon[data-help="first_name"]').click();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

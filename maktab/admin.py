@@ -1,5 +1,28 @@
 from django.contrib import admin
-from .models import Grade, Subject, Section, Lesson, Methodology, Textbook, TextbookPage
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser, Grade, Subject, Section, Lesson, Methodology, Textbook, TextbookPage, Task
+
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    list_display = ['phone_number', 'first_name', 'last_name', 'role', 'created_at', 'last_login_time']
+    list_filter = ['role', 'created_at', 'is_active']
+    search_fields = ['phone_number', 'first_name', 'last_name']
+    ordering = ['-created_at']
+    
+    fieldsets = (
+        (None, {'fields': ('phone_number', 'password')}),
+        ('Shaxsiy ma\'lumotlar', {'fields': ('first_name', 'last_name', 'birth_date', 'birth_place', 'role')}),
+        ('Ruxsatlar', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Muhim sanalar', {'fields': ('last_login', 'date_joined', 'created_at', 'last_login_time')}),
+    )
+    readonly_fields = ['created_at', 'last_login_time']
+    
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('phone_number', 'first_name', 'last_name', 'role', 'password1', 'password2'),
+        }),
+    )
 
 class MethodologyInline(admin.StackedInline):
     model = Methodology
@@ -46,7 +69,14 @@ class TextbookAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 @admin.register(TextbookPage)
-class TextbookAdmin(admin.ModelAdmin):
+class TextbookPageAdmin(admin.ModelAdmin):
     list_display = ['textbook', 'lesson', 'page_number']
-    list_filter = ['textbook__subject']
-    search_fields = ['textbook__title']
+    list_filter = ['textbook']
+    search_fields = ['textbook__title', 'lesson__title']
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ['title', 'lesson', 'difficulty', 'time_estimate', 'is_active', 'created_at']
+    list_filter = ['difficulty', 'is_active', 'lesson__section__subject__grade']
+    search_fields = ['title', 'lesson__title']
+    readonly_fields = ['created_at']
