@@ -1,16 +1,19 @@
 # metod/settings.py
 import os
 from pathlib import Path
+from .jazzmin_conf import *  # noqa
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = '90h8x=sd(as9c#)y)u3um_47bp)$i2-0dwsf5y_7e2r=r=$dtv'  # Replace with a secure key
+# Environment variables with defaults
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-secret-key-here')
 
-DEBUG = True  # Set to False in production
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -19,11 +22,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'maktab',  # Your app
     'feedback',  # Feedback app
+    'rest_framework',  # Django REST Framework if needed
+    'corsheaders',  # CORS headers if needed
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
