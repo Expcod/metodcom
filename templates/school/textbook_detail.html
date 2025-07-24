@@ -4,15 +4,180 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ textbook.title }} - {{ lesson.title }}</title>
+  <title>{{ textbook.title }}{% if section %} - {{ section.name }}{% endif %}</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="{% static 'css/textbook_detail.css' %}">
   <!-- PDF.js for better PDF viewing -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8fafc;
+    }
+    
+    .textbook-container {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    .textbook-header {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: white;
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .textbook-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .textbook-info {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .badge {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .pdf-container {
+      position: relative;
+      background: #f1f5f9;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      margin: 1.5rem;
+    }
+    
+    .pdf-toolbar {
+      background: white;
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .pdf-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .pdf-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+    
+    .pdf-viewer {
+      width: 100%;
+      min-height: 600px;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    .pdf-canvas {
+      max-width: 100%;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .pdf-loading {
+      text-align: center;
+      padding: 4rem;
+      color: #64748b;
+    }
+    
+    .pdf-error {
+      text-align: center;
+      padding: 4rem;
+      color: #dc2626;
+    }
+    
+    .btn {
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-sm {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+    
+    .btn-outline-primary {
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: #2563eb;
+      border-color: #2563eb;
+      transform: translateY(-1px);
+    }
+    
+    .btn-success {
+      background-color: #059669;
+      border-color: #059669;
+    }
+    
+    .btn-success:hover {
+      background-color: #047857;
+      border-color: #047857;
+      transform: translateY(-1px);
+    }
+    
+    @media (max-width: 768px) {
+      .textbook-header {
+        padding: 1.5rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+      
+      .textbook-title {
+        font-size: 1.5rem;
+      }
+      
+      .pdf-container {
+        margin: 1rem;
+      }
+      
+      .pdf-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .pdf-controls {
+        justify-content: center;
+      }
+      
+      .pdf-info {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Header -->
@@ -30,11 +195,6 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'maktab:home' %}">Bosh sahifa</a>
           </li>
-          {% if user.role == 'teacher' %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'maktab:grade_list' %}">Metodikalar</a>
-          </li>
-          {% endif %}
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'maktab:textbook_list' %}">Darsliklar</a>
           </li>
@@ -45,323 +205,220 @@
 
   <!-- Main Content -->
   <main>
-    <div class="textbook-detail-container">
-      <div class="container py-4">
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="mb-3">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'maktab:home' %}">Bosh sahifa</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'maktab:textbook_list' %}">Darsliklar</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ textbook.title }}</li>
-          </ol>
-        </nav>
-
-        <!-- Textbook Header -->
-        <div class="textbook-header">
-          <div class="row align-items-center">
-            <div class="col-md-8">
-              <h1 class="textbook-title">
-                <i class="bi bi-book-fill text-primary me-2"></i>
-                {{ textbook.title }}
-              </h1>
-              {% if lesson %}
-                <h2 class="lesson-title">{{ lesson.title }}</h2>
-              {% endif %}
-              <p class="textbook-description">{{ textbook.description }}</p>
-            </div>
-            <div class="col-md-4 text-md-end">
-              <div class="textbook-meta">
-                {% if textbook.author %}
-                  <span class="textbook-author">
-                    <i class="bi bi-person"></i> {{ textbook.author }}
-                  </span>
-                {% endif %}
-                {% if textbook.year %}
-                  <span class="textbook-year">
-                    <i class="bi bi-calendar"></i> {{ textbook.year }}
-                  </span>
-                {% endif %}
-                {% if textbook.grade %}
-                  <span class="textbook-grade">
-                    <i class="bi bi-mortarboard"></i> {{ textbook.grade.name }}
-                  </span>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Textbook and Methodologies -->
-        <div class="row mt-4">
-          <!-- Textbook Section -->
-          <div class="col-lg-8 mb-4">
-            <div class="pdf-container">
-              <div class="pdf-header">
-                <h2 class="pdf-title">
-                  <i class="bi bi-file-earmark-pdf text-primary me-2"></i>
-                  Darslik sahifasi
-                </h2>
-                {% if page %}
-                  <div class="pdf-page-info">
-                    <span class="badge bg-primary">{{ page.page_number }}-sahifa</span>
-                  </div>
-                {% endif %}
-              </div>
-
-              {% if page and textbook.pdf_file %}
-                <div class="pdf-viewer">
-                  <div class="pdf-toolbar">
-                    <button id="prev" class="btn btn-sm btn-outline-primary">
-                      <i class="bi bi-chevron-left"></i> Oldingi
-                    </button>
-                    <span id="page_num" class="page-num">{{ page.page_number }}</span> / <span id="page_count" class="page-count">...</span>
-                    <button id="next" class="btn btn-sm btn-outline-primary">
-                      Keyingi <i class="bi bi-chevron-right"></i>
-                    </button>
-                    <button id="zoomIn" class="btn btn-sm btn-outline-secondary">
-                      <i class="bi bi-zoom-in"></i>
-                    </button>
-                    <button id="zoomOut" class="btn btn-sm btn-outline-secondary">
-                      <i class="bi bi-zoom-out"></i>
-                    </button>
-                    <button id="fullscreen" class="btn btn-sm btn-outline-secondary">
-                      <i class="bi bi-fullscreen"></i>
-                    </button>
-                    <a href="{{ textbook.pdf_file.url }}" class="btn btn-sm btn-outline-success" download>
-                      <i class="bi bi-download"></i> Yuklab olish
-                    </a>
-                  </div>
-                  <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
-                  <div class="pdf-loading">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Yuklanmoqda...</span>
-                    </div>
-                    <p>PDF yuklanmoqda...</p>
-                  </div>
-                </div>
-              {% else %}
-                <div class="pdf-empty">
-                  <div class="pdf-empty-icon">
-                    <i class="bi bi-file-earmark-x"></i>
-                  </div>
-                  <h3 class="pdf-empty-title">PDF fayl topilmadi</h3>
-                  <p class="pdf-empty-text">Ushbu darslik uchun PDF fayl mavjud emas.</p>
-                </div>
-              {% endif %}
-            </div>
-          </div>
-
-          <!-- Methodologies Section -->
-          <div class="col-lg-4">
-            <div class="methodologies-container">
-              <div class="methodologies-header">
-                <h2 class="methodologies-title">
-                  <i class="bi bi-file-earmark-text text-primary me-2"></i>
-                  Metodik Qo'llanmalar
-                </h2>
-                <div class="methodologies-count">
-                  <span class="badge bg-primary">{{ methodologies|length }}</span>
-                </div>
-              </div>
-
-              {% if methodologies %}
-                <div class="methodologies-list">
-                  {% for methodology in methodologies %}
-                    <div class="methodology-item">
-                      <h3 class="methodology-title">{{ methodology.title }}</h3>
-                      <div class="methodology-content">
-                        {{ methodology.content|linebreaks }}
-                      </div>
-                      
-                      {% if methodology.image %}
-                        <div class="methodology-image">
-                          <img src="{{ methodology.image.url }}" alt="{{ methodology.title }}" class="img-fluid rounded">
-                        </div>
-                      {% endif %}
-                      
-                      {% if methodology.file %}
-                        <div class="methodology-file">
-                          <a href="{{ methodology.file.url }}" class="btn btn-outline-primary btn-sm" download>
-                            <i class="bi bi-download"></i> Faylni yuklab olish
-                          </a>
-                        </div>
-                      {% endif %}
-                    </div>
-                  {% endfor %}
-                </div>
-              {% else %}
-                <div class="methodologies-empty">
-                  <div class="methodologies-empty-icon">
-                    <i class="bi bi-file-earmark-x"></i>
-                  </div>
-                  <h3 class="methodologies-empty-title">Metodikalar topilmadi</h3>
-                  <p class="methodologies-empty-text">Ushbu darslik uchun metodikalar mavjud emas.</p>
-                </div>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="navigation-buttons mt-4">
-          <a href="{% url 'maktab:textbook_list' %}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Darsliklar ro'yxatiga qaytish
-          </a>
-          
-          {% if lesson %}
-            <a href="{% url 'maktab:lesson_detail' lesson.id %}" class="btn btn-primary">
-              Dars tafsilotlarini ko'rish <i class="bi bi-arrow-right"></i>
-            </a>
+    <div class="container py-4">
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'maktab:home' %}">Bosh sahifa</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'maktab:textbook_list' %}">Darsliklar</a></li>
+          {% if textbook.subject.grade %}
+            <li class="breadcrumb-item"><a href="{% url 'maktab:textbook_subject_list' textbook.subject.grade.id %}">{{ textbook.subject.grade.name }}</a></li>
           {% endif %}
+          <li class="breadcrumb-item active" aria-current="page">{{ textbook.subject.name }}</li>
+        </ol>
+      </nav>
+
+      <!-- Textbook Content -->
+      <div class="textbook-container">
+        <div class="textbook-header">
+          <h1 class="textbook-title">
+            <i class="bi bi-book me-3"></i>
+            {{ textbook.title }}
+          </h1>
+          <div class="textbook-info">
+            {% if textbook.subject %}
+              <span class="badge">{{ textbook.subject.name }}</span>
+            {% endif %}
+            {% if section %}
+              <span class="badge">{{ section.name }}</span>
+            {% endif %}
+            {% if textbook.subject.grade %}
+              <span class="badge">{{ textbook.subject.grade.name }}</span>
+            {% endif %}
+          </div>
         </div>
+
+        <!-- PDF Viewer -->
+        {% if textbook.pdf_file %}
+          <div class="pdf-container">
+            <div class="pdf-toolbar">
+              <div class="pdf-controls">
+                <button id="prevPage" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-chevron-left"></i> Oldingi
+                </button>
+                <span id="pageInfo" class="mx-3 fw-bold">1 / 1</span>
+                <button id="nextPage" class="btn btn-outline-primary btn-sm">
+                  Keyingi <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+              
+              <div class="pdf-info">
+                <button id="zoomOut" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-zoom-out"></i>
+                </button>
+                <span id="zoomLevel" class="mx-2">100%</span>
+                <button id="zoomIn" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-zoom-in"></i>
+                </button>
+                <button id="fullscreen" class="btn btn-outline-primary btn-sm ms-2">
+                  <i class="bi bi-fullscreen"></i>
+                </button>
+                <a href="{{ textbook.pdf_file.url }}" download class="btn btn-success btn-sm ms-2">
+                  <i class="bi bi-download"></i> Yuklab olish
+                </a>
+              </div>
+            </div>
+            
+            <div class="pdf-viewer" id="pdfViewer">
+              <div class="pdf-loading">
+                <div class="spinner-border text-primary mb-3" role="status">
+                  <span class="visually-hidden">Yuklanmoqda...</span>
+                </div>
+                <p>PDF yuklanmoqda...</p>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <div class="pdf-error">
+            <i class="bi bi-file-earmark-x" style="font-size: 3rem; color: #dc2626;"></i>
+            <h3>Darslik fayli topilmadi</h3>
+            <p>Bu darslik uchun PDF fayl mavjud emas.</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Navigation -->
+      <div class="mt-4">
+        <a href="{% if textbook.subject.grade %}{% url 'maktab:textbook_subject_list' textbook.subject.grade.id %}{% else %}{% url 'maktab:textbook_list' %}{% endif %}" class="btn btn-secondary">
+          <i class="bi bi-arrow-left"></i> Orqaga
+        </a>
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-light py-4 mt-auto border-top">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <p class="mb-0">&copy; {% now "Y" %} MetodCom. Barcha huquqlar himoyalangan.</p>
-        </div>
-        <div class="col-md-6 text-md-end">
-          <a href="#" class="text-decoration-none text-muted me-3">Foydalanish shartlari</a>
-          <a href="#" class="text-decoration-none text-muted">Bog'lanish</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Bootstrap JS Bundle with Popper -->
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <!-- PDF.js Script -->
   <script>
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageIsRendering = false;
+    let pageNumIsPending = null;
+    let scale = 1.2;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
     document.addEventListener('DOMContentLoaded', function() {
-      {% if page and textbook.pdf_file %}
-        // PDF.js initialization
-        const pdfUrl = "{{ textbook.pdf_file.url }}";
-        const initialPage = {{ page.page_number }};
-        let pdfDoc = null;
-        let pageNum = initialPage;
-        let pageRendering = false;
-        let pageNumPending = null;
-        let scale = 1.5;
-        const canvas = document.getElementById('pdf-canvas');
-        const ctx = canvas.getContext('2d');
-        const loadingIndicator = document.querySelector('.pdf-loading');
-        const pdfContainer = document.querySelector('.pdf-viewer');
+      {% if textbook.pdf_file %}
+        const pdfUrl = '{{ textbook.pdf_file.url }}';
+        initPDF(pdfUrl);
+      {% endif %}
+    });
 
-        // Initialize PDF.js
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+    function initPDF(url) {
+      pdfjsLib.getDocument(url).promise.then(doc => {
+        pdfDoc = doc;
+        document.getElementById('pageInfo').textContent = `${pageNum} / ${doc.numPages}`;
+        renderPage(pageNum);
+      }).catch(err => {
+        console.error('PDF yükleme hatası:', err);
+        document.getElementById('pdfViewer').innerHTML = `
+          <div class="pdf-error">
+            <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #dc2626;"></i>
+            <h3>PDF yüklenemedi</h3>
+            <p>Darslik faylını yüklerken xatolik yuz berdi.</p>
+          </div>
+        `;
+      });
+    }
 
-        // Load the PDF
-        pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
-          pdfDoc = pdf;
-          document.getElementById('page_count').textContent = pdf.numPages;
+    function renderPage(num) {
+      pageIsRendering = true;
+      
+      pdfDoc.getPage(num).then(page => {
+        const viewport = page.getViewport({ scale });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderCtx = {
+          canvasContext: ctx,
+          viewport
+        };
+
+        page.render(renderCtx).promise.then(() => {
+          pageIsRendering = false;
           
-          // Initial render
-          renderPage(pageNum);
-        }).catch(function(error) {
-          console.error('Error loading PDF:', error);
-          loadingIndicator.innerHTML = '<p class="text-danger">PDF yuklanishda xatolik yuz berdi.</p>';
+          // Clear the viewer and add the canvas
+          const viewer = document.getElementById('pdfViewer');
+          viewer.innerHTML = '';
+          canvas.className = 'pdf-canvas';
+          viewer.appendChild(canvas);
+
+          if (pageNumIsPending !== null) {
+            renderPage(pageNumIsPending);
+            pageNumIsPending = null;
+          }
         });
 
-        // Render the page
-        function renderPage(num) {
-          pageRendering = true;
-          loadingIndicator.style.display = 'flex';
-          
-          // Get the page
-          pdfDoc.getPage(num).then(function(page) {
-            const viewport = page.getViewport({ scale: scale });
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-            
-            // Render PDF page into canvas context
-            const renderContext = {
-              canvasContext: ctx,
-              viewport: viewport
-            };
-            
-            const renderTask = page.render(renderContext);
-            
-            // Wait for rendering to finish
-            renderTask.promise.then(function() {
-              pageRendering = false;
-              loadingIndicator.style.display = 'none';
-              
-              if (pageNumPending !== null) {
-                // New page rendering is pending
-                renderPage(pageNumPending);
-                pageNumPending = null;
-              }
-            });
-          });
-          
-          // Update page counters
-          document.getElementById('page_num').textContent = num;
-        }
+        document.getElementById('pageInfo').textContent = `${num} / ${pdfDoc.numPages}`;
+      });
+    }
 
-        // Go to previous page
-        function onPrevPage() {
-          if (pageNum <= 1) {
-            return;
-          }
-          pageNum--;
-          queueRenderPage(pageNum);
-        }
+    function queueRenderPage(num) {
+      if (pageIsRendering) {
+        pageNumIsPending = num;
+      } else {
+        renderPage(num);
+      }
+    }
 
-        // Go to next page
-        function onNextPage() {
-          if (pageNum >= pdfDoc.numPages) {
-            return;
-          }
-          pageNum++;
-          queueRenderPage(pageNum);
-        }
+    // Event Listeners
+    document.getElementById('prevPage').addEventListener('click', () => {
+      if (pageNum <= 1) return;
+      pageNum--;
+      queueRenderPage(pageNum);
+    });
 
-        // Queue the page rendering
-        function queueRenderPage(num) {
-          if (pageRendering) {
-            pageNumPending = num;
-          } else {
-            renderPage(num);
-          }
-        }
+    document.getElementById('nextPage').addEventListener('click', () => {
+      if (pageNum >= pdfDoc.numPages) return;
+      pageNum++;
+      queueRenderPage(pageNum);
+    });
 
-        // Zoom in
-        function zoomIn() {
-          scale += 0.25;
-          queueRenderPage(pageNum);
-        }
+    document.getElementById('zoomIn').addEventListener('click', () => {
+      scale += 0.2;
+      document.getElementById('zoomLevel').textContent = Math.round(scale * 100) + '%';
+      queueRenderPage(pageNum);
+    });
 
-        // Zoom out
-        function zoomOut() {
-          if (scale <= 0.5) return;
-          scale -= 0.25;
-          queueRenderPage(pageNum);
-        }
+    document.getElementById('zoomOut').addEventListener('click', () => {
+      if (scale <= 0.4) return;
+      scale -= 0.2;
+      document.getElementById('zoomLevel').textContent = Math.round(scale * 100) + '%';
+      queueRenderPage(pageNum);
+    });
 
-        // Toggle fullscreen
-        function toggleFullscreen() {
-          if (!document.fullscreenElement) {
-            pdfContainer.requestFullscreen().catch(err => {
-              console.error(`Error attempting to enable fullscreen: ${err.message}`);
-            });
-          } else {
-            document.exitFullscreen();
-          }
-        }
+    document.getElementById('fullscreen').addEventListener('click', () => {
+      const pdfContainer = document.querySelector('.pdf-container');
+      if (pdfContainer.requestFullscreen) {
+        pdfContainer.requestFullscreen();
+      } else if (pdfContainer.webkitRequestFullscreen) {
+        pdfContainer.webkitRequestFullscreen();
+      } else if (pdfContainer.msRequestFullscreen) {
+        pdfContainer.msRequestFullscreen();
+      }
+    });
 
-        // Button event listeners
-        document.getElementById('prev').addEventListener('click', onPrevPage);
-        document.getElementById('next').addEventListener('click', onNextPage);
-        document.getElementById('zoomIn').addEventListener('click', zoomIn);
-        document.getElementById('zoomOut').addEventListener('click', zoomOut);
-        document.getElementById('fullscreen').addEventListener('click', toggleFullscreen);
-      {% endif %}
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' && pageNum > 1) {
+        pageNum--;
+        queueRenderPage(pageNum);
+      } else if (e.key === 'ArrowRight' && pageNum < pdfDoc.numPages) {
+        pageNum++;
+        queueRenderPage(pageNum);
+      }
     });
   </script>
 </body>

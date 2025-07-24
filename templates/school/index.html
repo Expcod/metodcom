@@ -19,6 +19,10 @@
                 </div>
                 <div class="top-menu">
                     <span class="menu"> </span>
+                    <div class="mobile-menu-indicator">
+                        <span class="menu-hint">Bilimlar makoni bu yerda -----></span>
+                        <div class="arrow-animation">→</div>
+                    </div>
                     <ul class="cl-effect-16">
                         <li><a class="active" href="{% url 'maktab:home' %}" data-hover="Bosh Sahifa">Bosh Sahifa</a></li>
                         {% if user.is_authenticated %}
@@ -112,145 +116,9 @@
             </div>
         </div>
     </div>
-      <!-- Boshlang Button Section -->
-    <div class="start-button-section" style="text-align: center; padding: 4em 0; background: #f9f9f9;">
+      <div class="start-button-section" style="text-align: center; padding: 4em 0; background: #f9f9f9;">
         <div class="container">
             <a href="{% url 'maktab:register' %}" class="start-btn">Boshlang!</a>
-        </div>
-    </div>
-    
-    <div class="service-section">
-        <div class="col-md-7 service-section-grids">
-            <div class="container">
-                <div class="serve-head">
-                    <h3>Bizning Faoliyatlar</h3>
-                    <h6>Bolalaringiz uchun eng yaxshi xizmatlar</h6>
-                </div>
-            </div>
-            <div class="service-grid">
-                <div class="service-section-grid">
-                    <div class="icon">
-                        <i class="book"></i>
-                    </div>
-                    <div class="icon-text">
-                        <h4>Darsliklar va Qo'llanmalar</h4>
-                        <p>Boshlang'ich maktab o'quvchilari uchun sifatli darsliklar va metodik qo'llanmalar.</p>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="service-section-grid">
-                    <div class="icon">
-                        <i class="pencil"></i>
-                    </div>
-                    <div class="icon-text">
-                        <h4>Ijodiy Ta'lim</h4>
-                        <p>Bolalarning ijodiy qobiliyatlarini rivojlantirishga yo'naltirilgan darslar.</p>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="service-section-grid">
-                    <div class="icon">
-                        <i class="award"></i>
-                    </div>
-                    <div class="icon-text">
-                        <h4>Muvaffaqiyatli Natijalar</h4>
-                        <p>Har bir bolaning o'z imkoniyatlarini ro'yobga chiqarishiga yordam beramiz.</p>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-        <div class="col-md-5 service-text">
-            <p></p>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="news-section">
-        <div class="container">
-            <div class="news-head">
-                <h3>So'nggi Yangiliklar</h3>
-                <p>Bizning eng muhim yangiliklarimizni kuzatib boring</p>
-            </div>
-            <div class="news">
-                <div class="col-md-4 test-right01 test1">
-                    <img src="{% static 'images/n1.jpg' %}" class="img-responsive" alt="" />
-                    <div class="textbox textbox1">
-                        <h4 class="col-md-4 date">14<br><span>Iyun</span><br><label>0 <img src="{% static 'images/comment.png' %}" class="img-responsive" alt="" /></label></h4>
-                        <p class="col-md-8 news">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="col-md-4 test-right01 test1">
-                    <img src="{% static 'images/n2.jpg' %}" class="img-responsive" alt="" />
-                    <div class="textbox textbox1">
-                        <h4 class="col-md-4 date">15<br><span>Iyul</span><br><label>0 <img src="{% static 'images/comment.png' %}" class="img-responsive" alt="" /></label></h4>
-                        <p class="col-md-8 news">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="col-md-4 test-right01 test1">
-                    <img src="{% static 'images/n3.jpg' %}" class="img-responsive" alt="" />
-                    <div class="textbox textbox1">
-                        <h4 class="col-md-4 date">30<br><span>Avgust</span><br><label>0 <img src="{% static 'images/comment.png' %}" class="img-responsive" alt="" /></label></h4>
-                        <p class="col-md-8 news">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-    <div class="culture-section">
-        <div class="container">
-            <div class="culture-head">
-                <h3>Bizning Tadbirlar</h3>
-                <p>Tadbirlarimizni o'tkazib yubormang</p>
-            </div>
-            <div class="culture">
-                <div class="col-md-6 culture-grids">
-                    <a href="#"><img src="{% static 'images/event1.jpg' %}" class="img-responsive" alt="" /></a>
-                    <div class="e_date">
-                        <h4>15<br><span>Iyul</span></h4>
-                    </div>
-                    <a href="#"><h5>SAN'AT SESSIYASI</h5></a>
-                    <p>Lorem Ipsum - bu matn va nashriyot sanoatining oddiy soxta matnidir.</p>
-                </div>
-                <div class="col-md-6 culture-grids">
-                    <a href="#"><img src="{% static 'images/event2.jpg' %}" class="img-responsive" alt="" /></a>
-                    <div class="e_date">
-                        <h4>15<br><span>Iyul</span></h4>
-                    </div>
-                    <a href="#"><h5>SAN'AT SESSIYASI</h5></a>
-                    <p>Lorem Ipsum - bu matn va nashriyot sanoatining oddiy soxta matnidir.</p>
-                </div>
-                <div class="col-md-6 culture-grids">
-                    <a href="#"><img src="{% static 'images/event3.jpg' %}" class="img-responsive" alt="" /></a>
-                    <div class="e_date">
-                        <h4>15<br><span>Iyul</span></h4>
-                    </div>
-                    <a href="#"><h5>SAN'AT SESSIYASI</h5></a>
-                    <p>Lorem Ipsum - bu matn va nashriyot sanoatining oddiy soxta matnidir.</p>
-                </div>
-                <div class="col-md-6 culture-grids">
-                    <a href="#"><img src="{% static 'images/event4.jpg' %}" class="img-responsive" alt="" /></a>
-                    <div class="e_date">
-                        <h4>15<br><span>Iyul</span></h4>
-                    </div>
-                    <a href="#"><h5>SAN'AT SESSIYASI</h5></a>
-                    <p>Lorem Ipsum - bu matn va nashriyot sanoatining oddiy soxta matnidir.</p>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-    <div class="mid-bg">
-        <div class="container">
-            <div class="mid-section">
-                <h3>Maktabdagi Birinchi Kun!</h3>
-                <h4>TAYYORMISIZ?</h4>
-                <p>Har bir bola uchun ta'lim - bu yangi imkoniyatlar eshigi. Bizning maktabda o'quvchilar o'z qobiliyatlarini kashf etadilar.</p>
-            </div>
         </div>
     </div>
     <div id="contact" class="address">
@@ -258,7 +126,6 @@
             <div class="products">
                 <h3>Bizning Tariflar</h3>
                 <div class="pricing-container">
-                    <!-- Ota-ona tarifi -->
                     <div class="pricing-card parent-plan">
                         <h4>
                             <i class="fa fa-users"></i>Ota-ona Tarifi
@@ -275,7 +142,6 @@
                         </ul>
                     </div>
                     
-                    <!-- O'qituvchi tarifi -->
                     <div class="pricing-card teacher-plan">
                         <h4>
                             <i class="fa fa-graduation-cap"></i>O'qituvchi Tarifi
@@ -318,229 +184,401 @@
         <div class="clearfix"></div>
     </div>
     
-    <style>
-        /* Desktop uchun pricing container */
+
+<style>
+    /* YANGI QO'SHILGAN STIL: Bu mobile menu hint uchun to'g'ri pozitsiya kontekstini beradi */
+    .top-menu {
+        position: relative;
+    }
+
+    /* Mobile menu indicator - faqat mobile da ko'rinadi */
+    .mobile-menu-indicator {
+        display: none;
+        position: absolute;
+        top: 50%;
+        /* O'ZGARTIRILGAN STIL: Menyuning o'ng tomoniga emas, balki menyu tugmasining chap tomoniga joylash uchun o'zgartirildi */
+        right: 50px; 
+        transform: translateY(-50%);
+        background: rgba(255, 193, 7, 0.9);
+        color: #333;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 1000; /* Menyudan pastroq qavatda bo'lishi uchun */
+        white-space: nowrap;
+        border: 2px solid #ffc107;
+        animation: menuHintPulse 2s infinite;
+    }
+    
+    .menu-hint {
+        display: inline-block;
+        margin-right: 5px;
+    }
+    
+    .arrow-animation {
+        display: inline-block;
+        animation: arrowBounce 1.5s infinite;
+        font-size: 14px;
+        color: #ff6b6b;
+    }
+    
+    @keyframes menuHintPulse {
+        0%, 100% { 
+            transform: translateY(-50%) scale(1);
+            opacity: 0.9;
+        }
+        50% { 
+            transform: translateY(-50%) scale(1.05);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes arrowBounce {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(5px); }
+    }
+    
+    /* Menyu tugmasini yanada ko'zga ko'rinarliroq qilish */
+    .menu {
+        position: relative;
+        z-index: 1001; /* Hintdan yuqorida turishi uchun */
+    }
+    
+    /* Mobile holatda indicator ko'rsatish */
+    @media (max-width: 768px) {
+        .mobile-menu-indicator {
+            display: block;
+        }
+        
+        /* Menyu ochilganda indicator yashirish */
+        .top-menu.menu-open .mobile-menu-indicator {
+            display: none;
+        }
+        
+        /* Menu tugmasini yanada ajratib ko'rsatish */
+        .menu {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .menu:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .mobile-menu-indicator {
+            right: 45px;
+            font-size: 10px;
+            padding: 6px 10px;
+        }
+        
+        .menu-hint {
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .arrow-animation {
+            font-size: 12px;
+        }
+    }
+    /* Desktop uchun pricing container */
+    .pricing-container {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        margin-bottom: 20px;
+        align-items: stretch;
+        justify-content: center; /* Center alignment qo'shildi */
+    }
+    
+    .pricing-card {
+        background: rgba(255,255,255,0.1);
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        max-width: 300px; /* Maksimal kenglik qo'shildi */
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    
+    .parent-plan {
+        border: 2px solid #28a745;
+    }
+    
+    .parent-plan h4 {
+        color: #28a745;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    
+    .teacher-plan {
+        border: 2px solid #007bff;
+    }
+    
+    .teacher-plan h4 {
+        color: #007bff;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    
+    .price {
+        margin-bottom: 6px;
+        text-align: center; /* Price ni markazlashtirish */
+    }
+    
+    .amount {
+        font-size: 16px;
+        font-weight: bold;
+        display: block;
+        line-height: 1.2;
+    }
+    
+    .parent-plan .amount {
+        color: #28a745;
+    }
+    
+    .teacher-plan .amount {
+        color: #007bff;
+    }
+    
+    .period {
+        color: #666;
+        font-size: 10px;
+        display: block;
+        margin-top: 2px;
+    }
+    
+    .features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        flex-grow: 1;
+        text-align: left; /* Features list uchun chap hizalash */
+    }
+    
+    .features li {
+        padding: 1px 0;
+        color: #666;
+        font-size: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .features li:last-child {
+        border-bottom: none;
+    }
+    
+    .pricing-note {
+        text-align: center;
+        margin-top: 8px;
+        color: #666;
+        font-style: italic;
+        font-size: 12px;
+    }
+    
+    /* Footer address sections uchun balandlik balansini ta'minlash */
+    .address-left, .address-right {
+        min-height: 120px;
+        padding: 20px 15px;
+    }
+    
+    .address-right h3 {
+        color: #FFD700;
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+    
+    /* Form stillarini yaxshilash */
+    .address-right .form-group input,
+    .address-right .form-group textarea {
+        width: 100% !important;
+        padding: 12px !important;
+        border: 1px solid #ddd !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+        transition: border-color 0.3s ease !important;
+    }
+    
+    .address-right .form-group input:focus,
+    .address-right .form-group textarea:focus {
+        border-color: #007bff !important;
+        outline: none !important;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3) !important;
+    }
+    
+    .address-right button {
+        background: #007bff !important;
+        color: white !important;
+        padding: 12px 25px !important;
+        border: none !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        width: 100% !important;
+    }
+    
+    .address-right button:hover {
+        background: #0056b3 !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    @media (max-width: 768px) {
         .pricing-container {
-            display: flex;
-            flex-direction: row; /* Changed to row for side-by-side layout */
-            gap: 15px;
-            margin-bottom: 20px;
-            align-items: stretch; /* Ensures cards have the same height */
+            flex-direction: column;
+            gap: 20px;
+            align-items: center; /* Mobile da center alignment */
+            padding: 0 20px; /* Yan tomonlarga padding qo'shish */
         }
         
         .pricing-card {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
-            flex: 1; /* Makes cards share space equally */
-            display: flex; /* Added for inner content alignment */
-            flex-direction: column; /* Added for inner content alignment */
+            margin-bottom: 0;
+            min-height: auto;
+            padding: 20px;
+            width: 100%; /* To'liq kenglik */
+            max-width: 350px; /* Maksimal kenglik chegarasi */
+            text-align: center; /* Content ni markazlashtirish */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Chiroyli shadow */
         }
         
-        .pricing-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-        }
-        
-        .parent-plan {
-            border: 2px solid #28a745;
-        }
-        
-        .parent-plan h4 {
-            color: #28a745;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .teacher-plan {
-            border: 2px solid #007bff;
-        }
-        
+        .parent-plan h4,
         .teacher-plan h4 {
-            color: #007bff;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .price {
-            margin-bottom: 6px;
+            margin-bottom: 20px;
+            padding: 15px 0;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
         }
         
         .amount {
-            font-size: 16px;
-            font-weight: bold;
-            display: block;
-            line-height: 1.2;
-        }
-        
-        .parent-plan .amount {
-            color: #28a745;
-        }
-        
-        .teacher-plan .amount {
-            color: #007bff;
+            font-size: 24px;
+            margin-bottom: 5px;
         }
         
         .period {
-            color: #666;
-            font-size: 10px;
-            display: block;
-            margin-top: 2px;
-        }
-        
-        .features {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-grow: 1; /* Allows this element to grow and push footer to bottom */
-        }
-        
-        .features li {
-            padding: 1px 0;
-            color: #666;
-            font-size: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .features li:last-child {
-            border-bottom: none;
-        }
-        
-        .pricing-note {
-            text-align: center;
-            margin-top: 8px;
-            color: #666;
-            font-style: italic;
             font-size: 12px;
         }
         
-        /* Footer address sections uchun balandlik balansini ta'minlash */
+        .features {
+            text-align: left;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .features li {
+            font-size: 12px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
         .address-left, .address-right {
-            min-height: 120px;
+            min-height: auto;
             padding: 20px 15px;
         }
         
         .address-right h3 {
-            color: #FFD700;
-            font-size: 24px;
-            margin-bottom: 20px;
-            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-align: center;
         }
         
-        /* Form stillarini yaxshilash */
         .address-right .form-group input,
         .address-right .form-group textarea {
-            width: 100% !important;
-            padding: 12px !important;
-            border: 1px solid #ddd !important;
-            border-radius: 8px !important;
+            padding: 15px !important;
             font-size: 14px !important;
-            transition: border-color 0.3s ease !important;
-        }
-        
-        .address-right .form-group input:focus,
-        .address-right .form-group textarea:focus {
-            border-color: #007bff !important;
-            outline: none !important;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3) !important;
         }
         
         .address-right button {
-            background: #007bff !important;
-            color: white !important;
-            padding: 12px 25px !important;
-            border: none !important;
-            border-radius: 8px !important;
-            cursor: pointer !important;
-            transition: all 0.3s ease !important;
+            padding: 15px 20px !important;
             font-size: 16px !important;
-            font-weight: bold !important;
-            width: 100% !important;
         }
         
-        .address-right button:hover {
-            background: #0056b3 !important;
-            transform: translateY(-2px) !important;
+        .pricing-note {
+            font-size: 13px;
+            margin-top: 20px;
+            padding: 0 10px;
+        }
+    }
+    
+    /* Extra small devices (phones, 480px and down) */
+    @media (max-width: 480px) {
+        .pricing-container {
+            padding: 0 15px;
         }
         
-        @media (max-width: 768px) {
-            .pricing-container {
-                flex-direction: column; /* Stack cards on mobile */
-                gap: 12px;
-            }
-            
-            .pricing-card {
-                margin-bottom: 8px;
-                min-height: 60px;
-                padding: 8px;
-            }
-            
-            .parent-plan h4,
-            .teacher-plan h4 {
-                font-size: 12px;
-            }
-            
-            .amount {
-                font-size: 14px;
-            }
-            
-            .features li {
-                font-size: 9px;
-            }
-            
-            .address-left, .address-right {
-                min-height: auto;
-                padding: 15px 10px;
-            }
-            
-            .address-right h3 {
-                font-size: 20px;
-                margin-bottom: 15px;
-            }
-            
-            .address-right .form-group input,
-            .address-right .form-group textarea {
-                padding: 10px !important;
-                font-size: 13px !important;
-            }
-            
-            .address-right button {
-                padding: 10px 20px !important;
-                font-size: 14px !important;
-            }
+        .pricing-card {
+            padding: 15px;
+            max-width: 100%;
         }
         
-        /* Large desktop uchun */
-        @media (min-width: 1200px) {
-            .pricing-card {
-                min-height: 15px;
-                padding: 10px;
-            }
-            
-            .parent-plan h4,
-            .teacher-plan h4 {
-                font-size: 16px;
-            }
-            
-            .amount {
-                font-size: 18px;
-            }
-            
-            .features li {
-                font-size: 11px;
-                padding: 1px 0;
-            }
-            
-            .address-left, .address-right {
-                min-height: 140px;
-                padding: 25px 20px;
-            }
+        .parent-plan h4,
+        .teacher-plan h4 {
+            font-size: 14px;
         }
-    </style>
+        
+        .amount {
+            font-size: 20px;
+        }
+        
+        .features li {
+            font-size: 11px;
+        }
+    }
+    
+    /* Large desktop uchun */
+    @media (min-width: 1200px) {
+        .pricing-card {
+            min-height: 180px;
+            padding: 25px;
+        }
+        
+        .parent-plan h4,
+        .teacher-plan h4 {
+            font-size: 18px;
+        }
+        
+        .amount {
+            font-size: 20px;
+        }
+        
+        .features li {
+            font-size: 12px;
+            padding: 3px 0;
+        }
+        
+        .address-left, .address-right {
+            min-height: 160px;
+            padding: 30px 25px;
+        }
+    }
+</style>
     
     <div class="footer">
         <div class="container">
@@ -680,7 +718,6 @@
         });
     </script>
 
-    <!-- Tour CSS Animations -->
     <style>
         @keyframes pulse {
             0% { transform: scale(1.1); }

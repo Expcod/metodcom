@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darsliklar - Sinflar</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/subject_list.css' %}">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'maktab:home' %}">
+        <i class="bi bi-mortarboard-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+        <span class="fw-bold">Metod<span class="text-primary">com</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:home' %}">Bosh sahifa</a>
+          </li>
+          {% if user.role == 'teacher' %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:grade_list' %}">Metodikalar</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'maktab:textbook_list' %}">Darsliklar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:task_list' %}">Vazifalar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="subject-list-container">
+      <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'maktab:home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Darsliklar</li>
+          </ol>
+        </nav>
+
+        <!-- Header -->
+        <div class="subject-header">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h1 class="subject-title">
+                <i class="bi bi-book-fill text-primary me-2"></i>
+                Darsliklar - Sinf Tanlang
+              </h1>
+              <p class="subject-description">Quyidagi sinflardan birini tanlab, darsliklarni ko'ring</p>
+            </div>
+            <div class="col-md-4">
+              <div class="search-container">
+                <input type="text" id="gradeSearch" class="form-control" placeholder="Sinfni qidirish...">
+                <i class="bi bi-search search-icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grades Grid -->
+        {% if grades %}
+          <div class="subjects-grid">
+            <div class="row g-4">
+              {% for grade in grades %}
+                <div class="col-md-6 col-lg-4 grade-item" data-grade-name="{{ grade.name|lower }}">
+                  <div class="card h-100 subject-card">
+                    <div class="card-accent bg-success"></div>
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold mb-3">{{ grade.name }}</h5>
+                      <div class="mb-3">
+                        {% with textbook_count=grade.subjects.all|length %}
+                          <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">
+                            {{ textbook_count }} fan
+                          </span>
+                        {% endwith %}
+                      </div>
+                      <p class="card-text text-muted">
+                        {{ grade.name }} uchun elektron darsliklar to'plami. O'quvchilar va o'qituvchilar uchun foydali materiallar.
+                      </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                      <div class="text-center">
+                        <a href="{% url 'maktab:textbook_subject_list' grade.id %}" class="btn btn-success w-100">
+                          <i class="bi bi-book"></i> Darsliklarni Ko'rish
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <div class="subjects-empty">
+            <div class="subjects-empty-icon">
+              <i class="bi bi-book-x"></i>
+            </div>
+            <h3 class="subjects-empty-title">Darsliklar topilmadi</h3>
+            <p class="subjects-empty-text">Hozircha hech qanday sinf uchun darsliklar mavjud emas.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-light py-4 mt-auto border-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; {% now "Y" %} MetodCom. Barcha huquqlar himoyalangan.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="text-decoration-none text-muted me-3">Foydalanish shartlari</a>
+          <a href="#" class="text-decoration-none text-muted">Bog'lanish</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('gradeSearch');
+      const gradeItems = document.querySelectorAll('.grade-item');
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        
+        gradeItems.forEach(item => {
+          const gradeName = item.getAttribute('data-grade-name');
+          if (gradeName.includes(searchTerm)) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

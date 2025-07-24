@@ -133,6 +133,7 @@ class Methodology(models.Model):
 class Textbook(models.Model):
     title = models.CharField(max_length=200, verbose_name="Darslik nomi")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="textbooks", verbose_name="Fan")
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name="textbooks", verbose_name="Qism")
     pdf_file = models.FileField(upload_to='textbooks/', verbose_name="PDF fayl")
     cover_image = models.ImageField(upload_to='textbooks/covers/', blank=True, null=True, verbose_name="Muqova rasmi")
 

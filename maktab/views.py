@@ -105,19 +105,42 @@ def lesson_detail(request, lesson_id):
     return render(request, 'school/lesson_detail.html', context)
 
 @login_required
-def textbook_list(request):
-    textbooks = Textbook.objects.all()
-    return render(request, 'school/textbook_list.html', {'textbooks': textbooks})
+def textbook_grade_list(request):
+    """Darslik mavjud bo'lgan sinflar ro'yxati"""
+    grades = Grade.objects.filter(subjects__textbooks__isnull=False).distinct()
+    return render(request, 'school/textbook_grade_list.html', {'grades': grades})
+
+@login_required
+def textbook_subject_list(request, grade_id):
+    """Belgilangan sinf uchun darslik mavjud bo'lgan fanlar ro'yxati"""
+    grade = get_object_or_404(Grade, id=grade_id)
+    # Subjects with sections that have textbooks
+    subjects_with_sections = {}
+    
+    subjects = Subject.objects.filter(grade=grade).prefetch_related('sections__textbooks')
+    
+    for subject in subjects:
+        sections_with_textbooks = []
+        for section in subject.sections.all():
+            if section.textbooks.exists():
+                sections_with_textbooks.append({
+                    'section': section,
+                    'textbooks': section.textbooks.all()
+                })
+        if sections_with_textbooks:
+            subjects_with_sections[subject] = sections_with_textbooks
+    
+    return render(request, 'school/textbook_subject_list.html', {
+        'grade': grade,
+        'subjects_with_sections': subjects_with_sections
+    })
 
 @login_required
 def textbook_detail(request, textbook_id, section_id):
     textbook = get_object_or_404(Textbook, id=textbook_id)
     
-    if section_id == 0:
-        # Agar section_id 0 bo'lsa, birinchi sectionni olish
-        section = textbook.subject.sections.first()
-    else:
-        section = get_object_or_404(Section, id=section_id)
+    # Darslik qaysi sectionga tegishli ekanini tekshirish
+    section = textbook.section
     
     # Section ga tegishli darslarni olish
     lessons = section.lessons.all() if section else []

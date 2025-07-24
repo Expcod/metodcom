@@ -14,7 +14,8 @@ urlpatterns = [
     path('methodologies/lesson/<int:lesson_id>/', views.lesson_detail, name='lesson_detail'),  # Dars batafsil
     
     # Darsliklar URLs
-    path('textbooks/', views.textbook_list, name='textbook_list'),
+    path('textbooks/', views.textbook_grade_list, name='textbook_list'),  # Sinflar ro'yxati
+    path('textbooks/grade/<int:grade_id>/', views.textbook_subject_list, name='textbook_subject_list'),  # Fanlar ro'yxati
     path('textbooks/<int:textbook_id>/section/<int:section_id>/', views.textbook_detail, name='textbook_detail'),
     
     # Vazifalar URLs

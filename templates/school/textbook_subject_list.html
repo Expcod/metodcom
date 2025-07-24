@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ grade.name }} - Darsliklar</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/subject_list.css' %}">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'maktab:home' %}">
+        <i class="bi bi-mortarboard-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+        <span class="fw-bold">Metod<span class="text-primary">com</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:home' %}">Bosh sahifa</a>
+          </li>
+          {% if user.role == 'teacher' %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:grade_list' %}">Metodikalar</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'maktab:textbook_list' %}">Darsliklar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'maktab:task_list' %}">Vazifalar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="subject-list-container">
+      <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'maktab:home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'maktab:textbook_list' %}">Darsliklar</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ grade.name }}</li>
+          </ol>
+        </nav>
+
+        <!-- Header -->
+        <div class="subject-header">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h1 class="subject-title">
+                <i class="bi bi-book-fill text-success me-2"></i>
+                {{ grade.name }} - Darsliklar
+              </h1>
+              <p class="subject-description">{{ grade.name }} uchun mavjud darsliklar va qismlari</p>
+            </div>
+            <div class="col-md-4">
+              <div class="search-container">
+                <input type="text" id="subjectSearch" class="form-control" placeholder="Fanni qidirish...">
+                <i class="bi bi-search search-icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subjects Grid -->
+        {% if subjects_with_sections %}
+          <div class="subjects-grid">
+            <div class="row g-4">
+              {% for subject, sections_data in subjects_with_sections.items %}
+                <div class="col-md-6 col-lg-4 subject-item" data-subject-name="{{ subject.name|lower }}">
+                  <div class="card h-100 subject-card">
+                    <div class="card-img-container">
+                      {% with textbook=sections_data.0.textbooks.0 %}
+                        {% if textbook.cover_image %}
+                          <img src="{{ textbook.cover_image.url }}" class="card-img-top" alt="{{ textbook.title }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                          <div class="card-img-placeholder" style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-book text-white" style="font-size: 3rem;"></i>
+                          </div>
+                        {% endif %}
+                      {% endwith %}
+                      <div class="card-img-overlay">
+                        <span class="badge bg-success">{{ subject.name }}</span>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title fw-bold mb-3">{{ subject.name }}</h5>
+                      <div class="mb-3">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">
+                          {{ sections_data|length }} qism
+                        </span>
+                      </div>
+                      <p class="card-text text-muted">
+                        {{ subject.name }} fani uchun elektron darslik va qo'llanmalar to'plami. O'qituvchilar uchun foydali materiallar.
+                      </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                      <div class="row g-2">
+                        {% for section_data in sections_data %}
+                          {% for textbook in section_data.textbooks %}
+                            <div class="col-6">
+                              <a href="{% url 'maktab:textbook_detail' textbook.id section_data.section.id %}" class="btn btn-success btn-sm w-100">
+                                <i class="bi bi-book"></i> {{ section_data.section.name }}
+                              </a>
+                            </div>
+                          {% endfor %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <div class="subjects-empty">
+            <div class="subjects-empty-icon">
+              <i class="bi bi-book-x"></i>
+            </div>
+            <h3 class="subjects-empty-title">Darsliklar topilmadi</h3>
+            <p class="subjects-empty-text">{{ grade.name }} uchun hozircha darsliklar mavjud emas.</p>
+          </div>
+        {% endif %}
+
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons mt-4">
+          <a href="{% url 'maktab:textbook_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Orqaga
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-light py-4 mt-auto border-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; {% now "Y" %} MetodCom. Barcha huquqlar himoyalangan.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="text-decoration-none text-muted me-3">Foydalanish shartlari</a>
+          <a href="#" class="text-decoration-none text-muted">Bog'lanish</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('subjectSearch');
+      const subjectItems = document.querySelectorAll('.subject-item');
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        
+        subjectItems.forEach(item => {
+          const subjectName = item.getAttribute('data-subject-name');
+          if (subjectName.includes(searchTerm)) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
