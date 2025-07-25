@@ -1,743 +1,867 @@
 {% load static %}
 <!DOCTYPE HTML>
-<html>
+<html lang="uz">
 <head>
-    <title>Metodcom | Bosh Sahifa</title>
+    <title>Metodcom - Ta'lim Platformasi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="{% static 'css/bootstrap.css' %}" rel='stylesheet' type='text/css' />
-    <link href="{% static 'css/style.css' %}" rel='stylesheet' type='text/css' />	
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <link href='https://fonts.googleapis.com/css?family=Arvo:400,700,400italic|PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="home" class="header">
-        <div class="top-header">
-            <div class="container">
-                <div class="logo">
-                    <a href="{% url 'maktab:home' %}"><h1>Metod<span>com</span></h1></a>
-                </div>
-                <div class="top-menu">
-                    <span class="menu"> </span>
-                    <div class="mobile-menu-indicator">
-                        <span class="menu-hint">Bilimlar makoni bu yerda -----></span>
-                        <div class="arrow-animation">→</div>
-                    </div>
-                    <ul class="cl-effect-16">
-                        <li><a class="active" href="{% url 'maktab:home' %}" data-hover="Bosh Sahifa">Bosh Sahifa</a></li>
-                        {% if user.is_authenticated %}
-                            {% if user.role == 'teacher' %}
-                                <li><a href="{% url 'maktab:grade_list' %}" data-hover="Metodikalar">Metodikalar</a></li>
-                            {% endif %}
-                            <li><a href="{% url 'maktab:textbook_list' %}" data-hover="Darsliklar">Darsliklar</a></li>
-                            <li><a href="{% url 'maktab:task_list' %}" data-hover="Vazifalar">Vazifalar</a></li>
-                            <li><a href="{% url 'maktab:profile' %}" data-hover="Profil">Profil</a></li>
-                            <li><a href="{% url 'maktab:logout' %}" data-hover="Chiqish">Chiqish ({{ user.first_name }})</a></li>
-                        {% else %}
-                            <li><a href="{% url 'maktab:login' %}" data-hover="Kirish">Kirish</a></li>
-                            <li><a href="{% url 'maktab:register' %}" data-hover="Ro'yxat">Ro'yxat</a></li>
-                        {% endif %}
-                        <div class="clearfix"></div>
-                    </ul>
-                </div>
-                <script>
-                    $("span.menu").click(function(){
-                        $(".top-menu ul").slideToggle("slow" , function(){
-                        });
-                    });
-                </script>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-        <script src="{% static 'js/responsiveslides.min.js' %}"></script>
-        <script>
-            $(function () {
-                $("#slider4").responsiveSlides({
-                    auto: true,
-                    pager: true,
-                    nav: false,
-                    speed: 500,
-                    namespace: "callbacks",
-                    before: function () {
-                        $('.events').append("<li>oldin voqea ishga tushdi.</li>");
-                    },
-                    after: function () {
-                        $('.events').append("<li>keyin voqea ishga tushdi.</li>");
-                    }
-                });
-            });
-        </script>
-        <div id="top" class="callbacks_container">
-            <ul class="rslides" id="slider4">
-                <li>
-                    <div class="slider-top">
-                        <h2>Bilim - Bu Kuch</h2>
-                        <p>Bilim - bu kuch. Har bir bola uchun sifatli ta'lim va metodik qo'llanmalar.</p>
-                        <h6>Har Bir Bola Uchun Ochiq</h6>
-                    </div>
-                </li>
-                <li>
-                    <div class="slider-top">
-                        <h2>Mukammal Ta'lim</h2>
-                        <p>Bizning platformada boshlang'ich maktab o'qituvchilari uchun eng yaxshi resurslar.</p>
-                        <h6>Har Bir Bola Uchun Ochiq</h6>
-                    </div>
-                </li>
-                <li>
-                    <div class="slider-top">
-                        <h2>Maktab Ta'limi</h2>
-                        <p>Metodik qo'llanmalar va darsliklar bilan ta'limni yanada samarali qiling.</p>
-                        <h6>Har Bir Bola Uchun Ochiq</h6>
-                    </div>
-                </li>
-                <li>
-                    <div class="slider-top">
-                        <h2>Mukammal Ta'lim</h2>
-                        <p>Bizning platformada boshlang'ich maktab o'qituvchilari uchun eng yaxshi resurslar.</p>
-                        <h6>Har Bir Bola Uchun Ochiq</h6>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="slide-bottom">
-        <div class="slide-bottom-grids">
-            <div class="container">
-                <div class="col-md-6 slide-bottom-grid">
-                    <h3>Xush Kelibsiz!</h3>
-                    <p>Bizning platformada har bir bola uchun eng yaxshi ta'lim muhiti yaratilgan. O'qituvchilar uchun metodik qo'llanmalar va darsliklar.</p>
-                </div>
-                <div class="col-md-6 slide-bottom-grid">
-                    <h3>Bizning Maqsadimiz</h3>
-                    <p>Har bir bolaga sifatli ta'lim berish va ularning ijodiy qobiliyatlarini rivojlantirishni maqsad qilganmiz.</p>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-      <div class="start-button-section" style="text-align: center; padding: 4em 0; background: #f9f9f9;">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
-            <a href="{% url 'maktab:register' %}" class="start-btn">Boshlang!</a>
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'maktab:home' %}">
+                <div class="logo-icon me-2">
+                    <i class="bi bi-mortarboard-fill"></i>
+                </div>
+                <span class="logo-text">Metod<span class="text-primary">com</span></span>
+            </a>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation Menu -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'maktab:home' %}">
+                                <i class="bi bi-house me-1"></i>Bosh sahifa
+                            </a>
+                        </li>
+                        {% if user.role == 'teacher' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'maktab:grade_list' %}">
+                                <i class="bi bi-journal-bookmark me-1"></i>Metodikalar
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'maktab:textbook_list' %}">
+                                <i class="bi bi-book me-1"></i>Darsliklar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'maktab:task_list' %}">
+                                <i class="bi bi-clipboard-check me-1"></i>Vazifalar
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle me-1"></i>{{ user.first_name }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'maktab:profile' %}">
+                                    <i class="bi bi-person me-2"></i>Profil
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'maktab:logout' %}">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Chiqish
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'maktab:home' %}">Bosh sahifa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">Imkoniyatlar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#pricing">Tariflar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Aloqa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary btn-sm me-2" href="{% url 'maktab:login' %}">Kirish</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary btn-sm" href="{% url 'maktab:register' %}">Ro'yxatdan o'tish</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-    </div>
-    <div id="contact" class="address">
-        <div class="col-md-7 address-left">
-            <div class="products">
-                <h3>Bizning Tariflar</h3>
-                <div class="pricing-container">
-                    <div class="pricing-card parent-plan">
-                        <h4>
-                            <i class="fa fa-users"></i>Ota-ona Tarifi
-                        </h4>
-                        <div class="price">
-                            <span class="amount">99,000</span>
-                            <span class="period">so'm/yil</span>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-100 py-5">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="hero-content">
+                        <div class="hero-badge mb-3">
+                            <i class="bi bi-star-fill me-1"></i>
+                            Ta'limda yangi sifat
                         </div>
-                        <ul class="features">
-                            <li>✓ Darsliklar bo'limi</li>
-                            <li>✓ Vazifalar bo'limi</li>
-                            <li>✓ Onlayn yordam</li>
-                            <li>✓ Bolangizni kuzatish</li>
-                        </ul>
+                        <h1 class="hero-title mb-4">
+                            Boshlang'ich sinf <span class="text-primary">o'qituvchilari</span> 
+                            uchun zamonaviy ta'lim platformasi
+                        </h1>
+                        <p class="hero-description mb-4">
+                            Metodikalar, darsliklar va vazifalar bilan ta'limni yanada samarali qiling. 
+                            Har bir bola uchun sifatli bilim.
+                        </p>
+                        
+                        {% if user.is_authenticated %}
+                            <div class="hero-buttons">
+                                <a href="{% url 'maktab:textbook_list' %}" class="btn btn-primary btn-lg me-3">
+                                    <i class="bi bi-book me-2"></i>Darsliklarni ko'rish 📖
+                                </a>
+                                <a href="{% url 'maktab:task_list' %}" class="btn btn-outline-primary btn-lg">
+                                    <i class="bi bi-clipboard-check me-2"></i>Vazifalar ✏️
+                                </a>
+                                {% if user.role == 'teacher' %}
+                                    <h1></h1>
+                                    <a href="{% url 'maktab:grade_list' %}" class="btn btn-outline-primary btn-lg">
+                                        <i class="bi bi-card-list me-2"></i>Metodikalar 📔
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="hero-buttons">
+                                <a href="{% url 'maktab:register' %}" class="btn btn-primary btn-lg me-3">
+                                    <i class="bi bi-rocket-takeoff me-2"></i>Bu yerdan boshlang☺️
+                                </a>
+                                <a href="#features" class="btn btn-outline-primary btn-lg">
+                                    <i class="bi bi-info-circle me-2"></i>Batafsil 👨🏻‍🏫
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
-                    
-                    <div class="pricing-card teacher-plan">
-                        <h4>
-                            <i class="fa fa-graduation-cap"></i>O'qituvchi Tarifi
-                        </h4>
-                        <div class="price">
-                            <span class="amount">149,000</span>
-                            <span class="period">so'm/yil</span>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image">
+                        <div class="image-container">
+                            <div class="floating-card card-1">
+                                <i class="bi bi-journal-bookmark text-primary"></i>
+                                <span>Metodikalar</span>
+                            </div>
+                            <div class="floating-card card-2">
+                                <i class="bi bi-book text-success"></i>
+                                <span>Darsliklar</span>
+                            </div>
+                            <div class="floating-card card-3">
+                                <i class="bi bi-clipboard-check text-warning"></i>
+                                <span>Vazifalar</span>
+                            </div>
+                            <div class="main-illustration">
+                                <i class="bi bi-mortarboard-fill"></i>
+                            </div>
                         </div>
-                        <ul class="features">
-                            <li>✓ Barcha bo'limlar</li>
-                            <li>✓ Metodikalar to'plami</li>
-                            <li>✓ Darsliklar va vazifalar</li>
-                            <li>✓ Professional yordam</li>
-                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="clearfix"></div>
-            <p class="pricing-note">
-                Sifatli ta'lim uchun eng maqbul narxlar. Bolalaringiz kelajagi uchun sarmoya qiling!
-            </p>
         </div>
-        <div class="col-md-5 address-right">
-            <h3>Bizga murojaat qiling</h3>
-            <form id="feedbackForm" method="post" action="{% url 'feedback:ajax' %}">
-                {% csrf_token %}
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <input type="text" name="full_name" class="form-control" placeholder="Ism familiyangizni kiriting" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Bizning <span class="text-primary">imkoniyatlar 🔋</span></h2>
+                <p class="section-subtitle">Ta'lim jarayonini yanada samarali qilish uchun</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-primary">
+                            <i class="bi bi-journal-bookmark"></i>
+                        </div>
+                        <h4>Metodikalar 📓</h4>
+                        <p>O'qituvchilar uchun to'liq metodik qo'llanmalar va dars ishlanmalari</p>
+                    </div>
                 </div>
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <input type="tel" name="phone_number" class="form-control" placeholder="+998 90 123 45 67" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-success">
+                            <i class="bi bi-book"></i>
+                        </div>
+                        <h4>Darsliklar 📚</h4>
+                        <p>Barcha fanlar bo'yicha zamonaviy darsliklar va qo'shimcha materiallar</p>
+                    </div>
                 </div>
-                <div class="form-group" style="margin-bottom: 15px;">
-                    <textarea name="message" class="form-control" rows="4" placeholder="Murojaatingizni yozing..." required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; resize: vertical;"></textarea>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-warning">
+                            <i class="bi bi-clipboard-check"></i>
+                        </div>
+                        <h4>Vazifalar 📝</h4>
+                        <p>Turli darajadagi vazifalar va mashqlar bilan bilimni mustahkamlash</p>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background 0.3s;">Jo'natish</button>
-            </form>
-            <div id="feedbackMessage" style="margin-top: 15px; display: none;"></div>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </div>
-    
+    </section>
 
-<style>
-    /* YANGI QO'SHILGAN STIL: Bu mobile menu hint uchun to'g'ri pozitsiya kontekstini beradi */
-    .top-menu {
-        position: relative;
-    }
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title">Bizning <span class="text-primary">tariflar 💸</span></h2>
+                <p class="section-subtitle">Har bir ehtiyoj uchun mos tarif 💝</p>
+            </div>
+            
+            <div class="row justify-content-center g-4">
+                <!-- Ota-ona tarifi -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <div class="pricing-icon bg-success">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <h4>Ota-ona 👩‍❤️‍👨</h4>
+                            <p class="text-muted">Farzandingiz uchun 🎁</p>
+                        </div>
+                        
+                        <div class="pricing-price">
+                            <span class="price-amount">99,000</span>
+                            <span class="price-period">so'm/yil</span>
+                        </div>
+                        
+                        <ul class="pricing-features">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Darsliklar bo'limi</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Vazifalar bo'limi</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Onlayn yordam</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>Progress kuzatuv</li>
+                        </ul>
+                        
+                        <button class="btn btn-outline-success w-100">Tanlash ✅</button>
+                    </div>
+                </div>
+                
+                <!-- O'qituvchi tarifi -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="pricing-card featured">
+                        <div class="popular-badge">Mashhur</div>
+                        <div class="pricing-header">
+                            <div class="pricing-icon bg-primary">
+                                <i class="bi bi-mortarboard"></i>
+                            </div>
+                            <h4>O'qituvchi 👩‍🏫</h4>
+                            <p class="text-muted">Professional uchun 🎓</p>
+                        </div>
+                        
+                        <div class="pricing-price">
+                            <span class="price-amount">149,000</span>
+                            <span class="price-period">so'm/yil</span>
+                        </div>
+                        
+                        <ul class="pricing-features">
+                            <li><i class="bi bi-check-circle text-primary me-2"></i>Barcha bo'limlar</li>
+                            <li><i class="bi bi-check-circle text-primary me-2"></i>Metodikalar to'plami</li>
+                            <li><i class="bi bi-check-circle text-primary me-2"></i>Darsliklar va vazifalar</li>
+                            <li><i class="bi bi-check-circle text-primary me-2"></i>Professional yordam</li>
+                            <li><i class="bi bi-check-circle text-primary me-2"></i>Sinf boshqaruvi</li>
+                        </ul>
+                        
+                        <button class="btn btn-primary w-100">Tanlash ✅</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    /* Mobile menu indicator - faqat mobile da ko'rinadi */
-    .mobile-menu-indicator {
-        display: none;
-        position: absolute;
-        top: 50%;
-        /* O'ZGARTIRILGAN STIL: Menyuning o'ng tomoniga emas, balki menyu tugmasining chap tomoniga joylash uchun o'zgartirildi */
-        right: 50px; 
-        transform: translateY(-50%);
-        background: rgba(255, 193, 7, 0.9);
-        color: #333;
-        padding: 8px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        z-index: 1000; /* Menyudan pastroq qavatda bo'lishi uchun */
-        white-space: nowrap;
-        border: 2px solid #ffc107;
-        animation: menuHintPulse 2s infinite;
-    }
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="contact-info">
+                        <h2 class="mb-4">Bizga <span class="text-primary">murojaat</span> qiling 📩</h2>
+                        <p class="mb-4">Sizning savollaringiz bizning uchun muhim. Biz bilan bog'laning! 📞</p>
+
+                        <div class="contact-methods">
+                            <div class="contact-method">
+                                <i class="bi bi-telephone text-primary"></i>
+                                <div>
+                                    <h6>Telefon 📞</h6>
+                                    <a href="tel:+998946752709" class="contact-link">+998 94 675 27 09</a>
+                                </div>
+                            </div>
+                            <div class="contact-method">
+                                <i class="bi bi-envelope text-primary"></i>
+                                <div>
+                                    <h6>Email 📧</h6>
+                                    <a href="mailto:gulnozaqozixonova@gmail.com" class="contact-link">gulnozaqozixonova@gmail.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <h3 class="mb-3">Saytni o'zida murojaat qiling 📩</h3>
+                    <div class="contact-form-container">
+                        <form id="contactForm" class="contact-form">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">Ism familiya 😊</label>
+                                <input type="text" name="full_name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Telefon raqam ☎️</label>
+                                <input type="tel" name="phone_number" class="form-control" placeholder="+998 90 123 45 67" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Xabar 📨</label>
+                                <textarea name="message" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-send me-2"></i>Xabar yuborish
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-section bg-dark text-white py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="footer-logo">
+                        <i class="bi bi-mortarboard-fill me-2"></i>
+                        <span>Metod<span class="text-primary">com</span></span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">&copy; 2025 Metodcom. Barcha huquqlar himoyalangan.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    .menu-hint {
-        display: inline-block;
-        margin-right: 5px;
-    }
-    
-    .arrow-animation {
-        display: inline-block;
-        animation: arrowBounce 1.5s infinite;
-        font-size: 14px;
-        color: #ff6b6b;
-    }
-    
-    @keyframes menuHintPulse {
-        0%, 100% { 
-            transform: translateY(-50%) scale(1);
-            opacity: 0.9;
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-bg: #f8fafc;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
         }
-        50% { 
-            transform: translateY(-50%) scale(1.05);
-            opacity: 1;
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-    }
-    
-    @keyframes arrowBounce {
-        0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(5px); }
-    }
-    
-    /* Menyu tugmasini yanada ko'zga ko'rinarliroq qilish */
-    .menu {
-        position: relative;
-        z-index: 1001; /* Hintdan yuqorida turishi uchun */
-    }
-    
-    /* Mobile holatda indicator ko'rsatish */
-    @media (max-width: 768px) {
-        .mobile-menu-indicator {
-            display: block;
+
+        body {
+            background-color: var(--light-bg);
+            line-height: 1.6;
         }
-        
-        /* Menyu ochilganda indicator yashirish */
-        .top-menu.menu-open .mobile-menu-indicator {
-            display: none;
+
+        /* Navigation Styles */
+        .navbar {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95) !important;
         }
-        
-        /* Menu tugmasini yanada ajratib ko'rsatish */
-        .menu {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            padding: 8px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .menu:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-    }
-    
-    @media (max-width: 480px) {
-        .mobile-menu-indicator {
-            right: 45px;
-            font-size: 10px;
-            padding: 6px 10px;
-        }
-        
-        .menu-hint {
-            display: block;
-            margin-bottom: 2px;
-        }
-        
-        .arrow-animation {
-            font-size: 12px;
-        }
-    }
-    /* Desktop uchun pricing container */
-    .pricing-container {
-        display: flex;
-        flex-direction: row;
-        gap: 15px;
-        margin-bottom: 20px;
-        align-items: stretch;
-        justify-content: center; /* Center alignment qo'shildi */
-    }
-    
-    .pricing-card {
-        background: rgba(255,255,255,0.1);
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid rgba(255,255,255,0.2);
-        transition: all 0.3s ease;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        max-width: 300px; /* Maksimal kenglik qo'shildi */
-    }
-    
-    .pricing-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    }
-    
-    .parent-plan {
-        border: 2px solid #28a745;
-    }
-    
-    .parent-plan h4 {
-        color: #28a745;
-        margin-bottom: 8px;
-        font-size: 14px;
-        font-weight: bold;
-    }
-    
-    .teacher-plan {
-        border: 2px solid #007bff;
-    }
-    
-    .teacher-plan h4 {
-        color: #007bff;
-        margin-bottom: 8px;
-        font-size: 14px;
-        font-weight: bold;
-    }
-    
-    .price {
-        margin-bottom: 6px;
-        text-align: center; /* Price ni markazlashtirish */
-    }
-    
-    .amount {
-        font-size: 16px;
-        font-weight: bold;
-        display: block;
-        line-height: 1.2;
-    }
-    
-    .parent-plan .amount {
-        color: #28a745;
-    }
-    
-    .teacher-plan .amount {
-        color: #007bff;
-    }
-    
-    .period {
-        color: #666;
-        font-size: 10px;
-        display: block;
-        margin-top: 2px;
-    }
-    
-    .features {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        flex-grow: 1;
-        text-align: left; /* Features list uchun chap hizalash */
-    }
-    
-    .features li {
-        padding: 1px 0;
-        color: #666;
-        font-size: 10px;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .features li:last-child {
-        border-bottom: none;
-    }
-    
-    .pricing-note {
-        text-align: center;
-        margin-top: 8px;
-        color: #666;
-        font-style: italic;
-        font-size: 12px;
-    }
-    
-    /* Footer address sections uchun balandlik balansini ta'minlash */
-    .address-left, .address-right {
-        min-height: 120px;
-        padding: 20px 15px;
-    }
-    
-    .address-right h3 {
-        color: #FFD700;
-        font-size: 24px;
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
-    
-    /* Form stillarini yaxshilash */
-    .address-right .form-group input,
-    .address-right .form-group textarea {
-        width: 100% !important;
-        padding: 12px !important;
-        border: 1px solid #ddd !important;
-        border-radius: 8px !important;
-        font-size: 14px !important;
-        transition: border-color 0.3s ease !important;
-    }
-    
-    .address-right .form-group input:focus,
-    .address-right .form-group textarea:focus {
-        border-color: #007bff !important;
-        outline: none !important;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3) !important;
-    }
-    
-    .address-right button {
-        background: #007bff !important;
-        color: white !important;
-        padding: 12px 25px !important;
-        border: none !important;
-        border-radius: 8px !important;
-        cursor: pointer !important;
-        transition: all 0.3s ease !important;
-        font-size: 16px !important;
-        font-weight: bold !important;
-        width: 100% !important;
-    }
-    
-    .address-right button:hover {
-        background: #0056b3 !important;
-        transform: translateY(-2px) !important;
-    }
-    
-    @media (max-width: 768px) {
-        .pricing-container {
-            flex-direction: column;
-            gap: 20px;
-            align-items: center; /* Mobile da center alignment */
-            padding: 0 20px; /* Yan tomonlarga padding qo'shish */
-        }
-        
-        .pricing-card {
-            margin-bottom: 0;
-            min-height: auto;
-            padding: 20px;
-            width: 100%; /* To'liq kenglik */
-            max-width: 350px; /* Maksimal kenglik chegarasi */
-            text-align: center; /* Content ni markazlashtirish */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Chiroyli shadow */
-        }
-        
-        .parent-plan h4,
-        .teacher-plan h4 {
-            font-size: 16px;
-            margin-bottom: 15px;
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            color: white;
+            font-size: 1.2rem;
         }
-        
-        .price {
-            margin-bottom: 20px;
-            padding: 15px 0;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            border-bottom: 1px solid rgba(255,255,255,0.3);
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
         }
-        
-        .amount {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .period {
-            font-size: 12px;
-        }
-        
-        .features {
-            text-align: left;
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
+
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
             border-radius: 8px;
-            margin-top: 15px;
+            transition: var(--transition);
         }
-        
-        .features li {
-            font-size: 12px;
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+
+        .nav-link:hover {
+            background-color: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color) !important;
         }
-        
-        .address-left, .address-right {
-            min-height: auto;
-            padding: 20px 15px;
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            position: relative;
+            overflow: hidden;
         }
-        
-        .address-right h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: #64748b;
+            max-width: 500px;
+        }
+
+        .hero-buttons .btn {
+            padding: 0.75rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        /* Hero Image Animation */
+        .hero-image {
+            position: relative;
+            height: 500px;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .main-illustration {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.3);
+        }
+
+        .floating-card {
+            position: absolute;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-card i {
+            font-size: 1.5rem;
+        }
+
+        .card-1 {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .card-2 {
+            top: 30%;
+            right: 10%;
+            animation-delay: 1s;
+        }
+
+        .card-3 {
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Features Section */
+        .features-section {
+            background: white;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #64748b;
+        }
+
+        .feature-card {
             text-align: center;
-        }
-        
-        .address-right .form-group input,
-        .address-right .form-group textarea {
-            padding: 15px !important;
-            font-size: 14px !important;
-        }
-        
-        .address-right button {
-            padding: 15px 20px !important;
-            font-size: 16px !important;
-        }
-        
-        .pricing-note {
-            font-size: 13px;
-            margin-top: 20px;
-            padding: 0 10px;
-        }
-    }
-    
-    /* Extra small devices (phones, 480px and down) */
-    @media (max-width: 480px) {
-        .pricing-container {
-            padding: 0 15px;
-        }
-        
-        .pricing-card {
-            padding: 15px;
-            max-width: 100%;
-        }
-        
-        .parent-plan h4,
-        .teacher-plan h4 {
-            font-size: 14px;
-        }
-        
-        .amount {
-            font-size: 20px;
-        }
-        
-        .features li {
-            font-size: 11px;
-        }
-    }
-    
-    /* Large desktop uchun */
-    @media (min-width: 1200px) {
-        .pricing-card {
-            min-height: 180px;
-            padding: 25px;
-        }
-        
-        .parent-plan h4,
-        .teacher-plan h4 {
-            font-size: 18px;
-        }
-        
-        .amount {
-            font-size: 20px;
-        }
-        
-        .features li {
-            font-size: 12px;
-            padding: 3px 0;
-        }
-        
-        .address-left, .address-right {
-            min-height: 160px;
-            padding: 30px 25px;
-        }
-    }
-</style>
-    
-    <div class="footer">
-        <div class="container">
-            <div class="copy">
-                <p>© 2025 Barcha huquqlar himoyalangan.</p>
-            </div>
-        </div>
-    </div>
-    <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            $(".scroll").click(function(event){		
-                event.preventDefault();
-                $('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
-            });
-        });
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $().UItoTop({ easingType: 'easeOutQuart' });
-            
-            // Tour Guide - 10 sekunddan so'ng ishga tushadi
-            setTimeout(function() {
-                if (!localStorage.getItem('tourCompleted')) {
-                    showTourGuide();
-                }
-            }, 10000); // 10 sekund
-        });
-
-        function showTourGuide() {
-            // Tour overlay yaratish
-            const overlay = $('<div id="tour-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; display: flex; align-items: center; justify-content: center;"></div>');
-            
-            // Tour content
-            const tourContent = $(`
-                <div style="background: white; padding: 40px; border-radius: 15px; max-width: 500px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                    <button onclick="closeTour()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
-                    <h2 style="color: #2c3e50; margin-bottom: 20px; font-family: 'PT Sans', sans-serif;">🎉 Xush kelibsiz!</h2>
-                    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
-                        Keling birgalikda dars qilamiz! Bizning platformada o'qituvchilar va ota-onalar uchun ajoyib imkoniyatlar mavjud.
-                    </p>
-                    <div style="margin: 30px 0;">
-                        <p style="color: #e74c3c; font-weight: bold; font-size: 18px; margin-bottom: 15px;">👇 Pastdagi tugmani bosing!</p>
-                        <div style="animation: bounce 2s infinite; font-size: 30px;">⬇️</div>
-                    </div>
-                </div>
-            `);
-            
-            overlay.append(tourContent);
-            $('body').append(overlay);
-            
-            // Boshlang tugmasini highlight qilish
-            highlightStartButton();
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            height: 100%;
         }
 
-        function highlightStartButton() {
-            const startBtn = $('.start-btn');
-            if (startBtn.length) {
-                startBtn.css({
-                    'animation': 'pulse 1.5s infinite, glow 2s infinite',
-                    'box-shadow': '0 0 20px #ff6b6b, 0 0 40px #ff6b6b',
-                    'transform': 'scale(1.1)',
-                    'transition': 'all 0.3s ease'
-                });
-                
-                // Scroll to start button
-                $('html, body').animate({
-                    scrollTop: startBtn.offset().top - 200
-                }, 1000);
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-card h4 {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #64748b;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            background: var(--light-bg);
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            height: 100%;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .pricing-price {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .price-period {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: white;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-method i {
+            width: 50px;
+            height: 50px;
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .contact-form-container {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+        }
+        /* Contact link styles - CSS bo'limiga qo'shing */
+        .contact-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .contact-link:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+            transform: translateX(2px);
+        }
+
+        /* Phone and email specific hover effects */
+        a[href^="tel:"]:hover {
+            color: var(--secondary-color) !important;
+        }
+
+        a[href^="mailto:"]:hover {
+            color: var(--warning-color) !important;
+        }
+        /* Footer */
+        .footer-section {
+            background: var(--dark-color) !important;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+            }
+
+            .hero-buttons .btn {
+                padding: 0.625rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .floating-card {
+                font-size: 0.875rem;
+                padding: 0.75rem 1rem;
+            }
+
+            .main-illustration {
+                width: 150px;
+                height: 150px;
+                font-size: 3rem;
+            }
+
+            .hero-image {
+                height: 400px;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+                margin-top: 1rem;
+            }
+
+            .navbar-collapse {
+                background: white;
+                padding: 1rem;
+                border-radius: var(--border-radius);
+                margin-top: 1rem;
+                box-shadow: var(--box-shadow);
             }
         }
 
-        function closeTour() {
-            $('#tour-overlay').fadeOut(500, function() {
-                $(this).remove();
-            });
-            localStorage.setItem('tourCompleted', 'true');
-            
-            // Boshlang tugmasini normal holatga qaytarish
-            $('.start-btn').css({
-                'animation': 'none',
-                'box-shadow': 'none',
-                'transform': 'none'
-            });
+        /* Utilities */
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            transition: var(--transition);
         }
 
-        // Feedback form submission
-        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-        
-            // Loading state
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Yuborilmoqda...';
-            submitBtn.disabled = true;
-        
-            // Collect form data
-            const formData = {
-                full_name: document.querySelector('input[name="full_name"]').value,
-                phone_number: document.querySelector('input[name="phone_number"]').value,
-                message: document.querySelector('textarea[name="message"]').value
-            };
-        
-            // Send AJAX request
-            fetch('/feedback/ajax/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                const messageDiv = document.getElementById('feedbackMessage');
-                if (data.success) {
-                    messageDiv.innerHTML = '<div style="color: green; font-weight: bold; padding: 10px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px;">✓ ' + data.message + '</div>';
-                    messageDiv.style.display = 'block';
-                    document.getElementById('feedbackForm').reset(); // Clear form
-                    setTimeout(function() {
-                        messageDiv.style.display = 'none';
-                    }, 5000);
-                } else {
-                    messageDiv.innerHTML = '<div style="color: red; font-weight: bold; padding: 10px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 5px;">✗ ' + (data.message || 'Xatolik yuz berdi') + '</div>';
-                    messageDiv.style.display = 'block';
-                }
-            })
-            .catch(error => {
-                const messageDiv = document.getElementById('feedbackMessage');
-                messageDiv.innerHTML = '<div style="color: red; font-weight: bold; padding: 10px; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 5px;">✗ Xatolik yuz berdi. Qaytadan urinib ko\'ring.</div>';
-                messageDiv.style.display = 'block';
-                console.error('Error:', error);
-            })
-            .finally(() => {
-                // Reset button
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            });
-        });
-    </script>
+        .btn:hover {
+            transform: translateY(-2px);
+        }
 
-    <style>
-        @keyframes pulse {
-            0% { transform: scale(1.1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1.1); }
+        .text-primary {
+            color: var(--primary-color) !important;
         }
-        
-        @keyframes glow {
-            0% { box-shadow: 0 0 20px #ff6b6b; }
-            50% { box-shadow: 0 0 30px #ff6b6b, 0 0 50px #ff6b6b; }
-            100% { box-shadow: 0 0 20px #ff6b6b; }
+
+        .bg-primary {
+            background-color: var(--primary-color) !important;
         }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #3730a3;
+            border-color: #3730a3;
+        }
+
+        .bg-success {
+            background-color: var(--secondary-color) !important;
+        }
+
+        .bg-warning {
+            background-color: var(--warning-color) !important;
         }
     </style>
 
-    <a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"></span></a>
+    <!-- Custom Scripts -->
+    <script>
+        // Contact form handling
+        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Yuborilmoqda...';
+            btn.disabled = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                btn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Yuborildi!';
+                btn.className = 'btn btn-success w-100';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.className = 'btn btn-primary w-100';
+                    btn.disabled = false;
+                    this.reset();
+                }, 2000);
+            }, 1500);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+    </script>
 </body>
 </html>
