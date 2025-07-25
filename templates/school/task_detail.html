@@ -9,8 +9,304 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="{% static 'css/lesson_detail.css' %}">
+  <!-- PDF.js for better PDF viewing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8fafc;
+    }
+    
+    .task-detail-container {
+      min-height: 100vh;
+    }
+    
+    .task-header {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .task-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .task-description {
+      font-size: 1.125rem;
+      opacity: 0.9;
+      margin-bottom: 0;
+    }
+    
+    .task-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .badge {
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+    }
+    
+    /* Textbook container */
+    .textbook-container {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      height: 100%;
+    }
+    
+    .textbook-header {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .textbook-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    /* PDF Viewer */
+    .pdf-container {
+      background: #f1f5f9;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      margin: 1rem;
+    }
+    
+    .pdf-toolbar {
+      background: white;
+      padding: 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .pdf-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .pdf-viewer {
+      width: 100%;
+      min-height: 500px;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    .pdf-canvas {
+      max-width: 100%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .pdf-loading {
+      text-align: center;
+      padding: 3rem;
+      color: #64748b;
+    }
+    
+    /* Task info container */
+    .task-info-container {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    
+    .task-info-header {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: white;
+      padding: 1.5rem;
+    }
+    
+    .task-info-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .task-instructions-container {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    .task-instructions-header {
+      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+      color: white;
+      padding: 1.5rem;
+    }
+    
+    .task-instructions {
+      padding: 1.5rem;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+    
+    .btn {
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-sm {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .task-header {
+        padding: 1.5rem;
+        text-align: center;
+      }
+      
+      .task-title {
+        font-size: 1.5rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .pdf-container {
+        margin: 0.5rem;
+      }
+      
+      .pdf-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .pdf-controls {
+        justify-content: center;
+      }
+    }
+    /* Parent restriction styles */
+    .parent-restricted-section {
+      position: relative;
+    }
+    
+    .blurred-button {
+      filter: blur(2px);
+      opacity: 0.6;
+      cursor: not-allowed !important;
+      transition: none !important;
+      pointer-events: none;
+    }
+    
+    .blurred-button:hover {
+      filter: blur(2px);
+      opacity: 0.6;
+      transform: none !important;
+    }
+    
+    .parent-warning {
+      display: block;
+      text-align: center;
+      margin-top: 8px;
+      font-style: italic;
+      color: #6c757d !important;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      background: rgba(108, 117, 125, 0.1);
+      border-radius: 4px;
+      border: 1px dashed rgba(108, 117, 125, 0.3);
+    }
+    
+    .parent-nav-section {
+      position: relative;
+    }
+    
+    .parent-warning-nav {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 8px;
+      white-space: nowrap;
+    }
+    
+    .parent-warning-nav small {
+      display: inline-block;
+      background: rgba(108, 117, 125, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px dashed rgba(108, 117, 125, 0.3);
+      font-style: italic;
+    }
+    
+    .lesson-access-section {
+      margin-top: 1rem;
+    }
+    
+    /* Enhanced blur effect on hover for parents */
+    .parent-restricted-section:hover .blurred-button {
+      filter: blur(3px);
+      opacity: 0.4;
+    }
+    
+    .parent-nav-section:hover .blurred-button {
+      filter: blur(3px);
+      opacity: 0.4;
+    }
+    
+    /* Warning animation */
+    .parent-warning {
+      animation: fadeInWarning 0.5s ease-in-out;
+    }
+    
+    @keyframes fadeInWarning {
+      0% {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .parent-warning-nav {
+        position: static;
+        transform: none;
+        margin-top: 10px;
+        text-align: center;
+      }
+      
+      .parent-warning {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Header -->
@@ -46,7 +342,7 @@
 
   <!-- Main Content -->
   <main>
-    <div class="lesson-detail-container">
+    <div class="task-detail-container">
       <div class="container py-4">
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb" class="mb-3">
@@ -54,151 +350,315 @@
             <li class="breadcrumb-item"><a href="{% url 'maktab:home' %}">Bosh sahifa</a></li>
             <li class="breadcrumb-item"><a href="{% url 'maktab:task_list' %}">Vazifalar</a></li>
             <li class="breadcrumb-item"><a href="{% url 'maktab:task_subject_list' grade.id %}">{{ grade.name }}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'maktab:task_by_subject' subject.id %}">{{ subject.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'maktab:task_by_subject' section.id %}">{{ subject.name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ task.title }}</li>
           </ol>
         </nav>
 
         <!-- Task Header -->
-        <div class="lesson-header">
+        <div class="task-header">
           <div class="row align-items-center">
             <div class="col-md-8">
-              <h1 class="lesson-title">
-                <i class="bi bi-clipboard-check-fill text-primary me-2"></i>
+              <h1 class="task-title">
+                <i class="bi bi-clipboard-check-fill me-3"></i>
                 {{ task.title }}
               </h1>
-              <p class="lesson-description">{{ task.description }}</p>
+              <p class="task-description">{{ task.description }}</p>
             </div>
             <div class="col-md-4 text-md-end">
-              <div class="lesson-meta">
-                <span class="badge bg-{% if task.difficulty == 'easy' %}success{% elif task.difficulty == 'medium' %}warning{% else %}danger{% endif %} mb-2 d-block">
+              <div class="task-meta">
+                <span class="badge bg-{% if task.difficulty == 'easy' %}success{% elif task.difficulty == 'medium' %}warning{% else %}danger{% endif %}">
+                  <i class="bi bi-star-fill me-1"></i>
                   {% if task.difficulty == 'easy' %}Oson
                   {% elif task.difficulty == 'medium' %}Orta
                   {% elif task.difficulty == 'hard' %}Qiyin{% endif %}
                 </span>
-                <span class="lesson-section d-block">
-                  <i class="bi bi-clock"></i> {{ task.time_estimate }} daqiqa
+                <span class="badge bg-primary">
+                  <i class="bi bi-clock me-1"></i>{{ task.time_estimate }} daqiqa
                 </span>
-                <span class="lesson-subject d-block">
-                  <i class="bi bi-journal"></i> {{ subject.name }}
+                <span class="badge bg-info">
+                  <i class="bi bi-journal me-1"></i>{{ subject.name }}
                 </span>
+                {% if textbook_page %}
+                <span class="badge bg-secondary">
+                  <i class="bi bi-book me-1"></i>{{ textbook_page.page_number }}-sahifa
+                </span>
+                {% endif %}
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Task Content and Related Lesson -->
-        <div class="row mt-4">
-          <!-- Task Instructions -->
+        <!-- Main Content Row -->
+        <div class="row">
+          <!-- Textbook Section (Left) -->
           <div class="col-lg-8 mb-4">
             <div class="textbook-container">
               <div class="textbook-header">
                 <h2 class="textbook-title">
-                  <i class="bi bi-list-check text-primary me-2"></i>
-                  Bajarish yo'riqnomasi
+                  <i class="bi bi-book-open me-2"></i>
+                  Darslik sahifasi
                 </h2>
+                {% if textbook_page %}
+                  <span class="badge bg-light text-dark">{{ textbook_page.page_number }}-sahifa</span>
+                {% endif %}
               </div>
 
-              <div class="card">
-                <div class="card-body">
-                  <div class="task-instructions">
-                    {{ task.instructions|linebreaks }}
+              {% if textbook and textbook.pdf_file %}
+                <div class="pdf-container">
+                  <div class="pdf-toolbar">
+                    <div class="pdf-controls">
+                      <button id="prevPage" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-chevron-left"></i> Oldingi
+                      </button>
+                      <span id="pageInfo" class="mx-3 fw-bold">{{ textbook_page.page_number|default:1 }} / 1</span>
+                      <button id="nextPage" class="btn btn-outline-primary btn-sm">
+                        Keyingi <i class="bi bi-chevron-right"></i>
+                      </button>
+                    </div>
+                    
+                    <div class="pdf-info">
+                      <button id="zoomOut" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-zoom-out"></i>
+                      </button>
+                      <span id="zoomLevel" class="mx-2">100%</span>
+                      <button id="zoomIn" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-zoom-in"></i>
+                      </button>
+                      <a href="{{ textbook.pdf_file.url }}" download class="btn btn-success btn-sm ms-2">
+                        <i class="bi bi-download"></i>
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div class="pdf-viewer" id="pdfViewer">
+                    <div class="pdf-loading">
+                      <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Yuklanmoqda...</span>
+                      </div>
+                      <p>Darslik yuklanmoqda...</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              {% else %}
+                <div class="text-center py-5">
+                  <i class="bi bi-book-x text-muted" style="font-size: 3rem;"></i>
+                  <h4 class="text-muted mt-3">Darslik topilmadi</h4>
+                  <p class="text-muted">Bu vazifa uchun darslik sahifasi mavjud emas.</p>
+                </div>
+              {% endif %}
             </div>
           </div>
 
-          <!-- Related Lesson Info -->
+          <!-- Task Info and Instructions (Right) -->
           <div class="col-lg-4">
-            <div class="methodologies-container">
-              <div class="methodologies-header">
-                <h2 class="methodologies-title">
-                  <i class="bi bi-book text-primary me-2"></i>
-                  Tegishli Dars
+            <!-- Task Info -->
+            <div class="task-info-container">
+              <div class="task-info-header">
+                <h2 class="task-info-title">
+                  <i class="bi bi-info-circle me-2"></i>
+                  Vazifa ma'lumotlari
                 </h2>
               </div>
-
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">{{ lesson.title }}</h5>
-                  <p class="card-text text-muted">{{ lesson.description|default:"Bu vazifa quyidagi dars bilan bog'liq." }}</p>
-                  
-                  <div class="mb-3">
-                    <small class="text-muted d-block">
-                      <i class="bi bi-collection me-1"></i>{{ section.name }}
-                    </small>
-                    <small class="text-muted d-block">
-                      <i class="bi bi-mortarboard me-1"></i>{{ grade.name }}
-                    </small>
+              
+              <div class="card-body">
+                <div class="row text-center mb-3">
+                  <div class="col-6">
+                    <div class="border-end">
+                      <div class="fs-4 text-primary">{{ task.time_estimate }}</div>
+                      <small class="text-muted">Daqiqa</small>
+                    </div>
                   </div>
+                  <div class="col-6">
+                    <div class="fs-6 text-{% if task.difficulty == 'easy' %}success{% elif task.difficulty == 'medium' %}warning{% else %}danger{% endif %}">
+                      {% if task.difficulty == 'easy' %}★☆☆
+                      {% elif task.difficulty == 'medium' %}★★☆
+                      {% elif task.difficulty == 'hard' %}★★★{% endif %}
+                    </div>
+                    <small class="text-muted">Qiyinlik</small>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <h6 class="fw-bold">Tegishli dars:</h6>
+                  <p class="text-muted mb-2">{{ lesson.title }}</p>
                   
-                  <a href="{% url 'maktab:lesson_detail' lesson.id %}" class="btn btn-outline-primary btn-sm w-100">
-                    <i class="bi bi-eye me-1"></i>Darsni ko'rish
-                  </a>
+                  <div class="d-flex flex-wrap gap-1">
+                    <span class="badge bg-light text-dark">{{ grade.name }}</span>
+                    <span class="badge bg-light text-dark">{{ subject.name }}</span>
+                    <span class="badge bg-light text-dark">{{ section.name }}</span>
+                  </div>
+                </div>
+                
+                <!-- Teacher/Parent Button Section -->
+                <div class="lesson-access-section">
+                  {% if user.role == 'teacher' %}
+                    <a href="{% url 'maktab:lesson_detail' lesson.id %}" class="btn btn-outline-primary btn-sm w-100">
+                      <i class="bi bi-eye me-1"></i>Darsni ko'rish
+                    </a>
+                  {% else %}
+                    <!-- Blurred button for parents -->
+                    <div class="parent-restricted-section">
+                      <button class="btn btn-outline-primary btn-sm w-100 blurred-button" disabled>
+                        <i class="bi bi-eye me-1"></i>Darsni ko'rish
+                      </button>
+                      <small class="text-muted parent-warning">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Kechirasiz, bu faqat o'qituvchilar uchun :)
+                      </small>
+                    </div>
+                  {% endif %}
                 </div>
               </div>
+            </div>
 
-              <!-- Task Meta Info -->
-              <div class="card mt-3">
-                <div class="card-header">
-                  <h6 class="mb-0">
-                    <i class="bi bi-info-circle me-1"></i>Vazifa ma'lumotlari
-                  </h6>
-                </div>
-                <div class="card-body">
-                  <div class="row text-center">
-                    <div class="col-6">
-                      <div class="border-end">
-                        <div class="fs-4 text-primary">{{ task.time_estimate }}</div>
-                        <small class="text-muted">Daqiqa</small>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div class="fs-6 text-{% if task.difficulty == 'easy' %}success{% elif task.difficulty == 'medium' %}warning{% else %}danger{% endif %}">
-                        {% if task.difficulty == 'easy' %}★☆☆
-                        {% elif task.difficulty == 'medium' %}★★☆
-                        {% elif task.difficulty == 'hard' %}★★★{% endif %}
-                      </div>
-                      <small class="text-muted">Qiyinlik</small>
-                    </div>
-                  </div>
-                </div>
+            <!-- Task Instructions -->
+            <div class="task-instructions-container">
+              <div class="task-instructions-header">
+                <h2 class="task-info-title">
+                  <i class="bi bi-list-check me-2"></i>
+                  Bajarish yo'riqnomasi
+                </h2>
+              </div>
+              
+              <div class="task-instructions">
+                {{ task.instructions|linebreaks }}
               </div>
             </div>
           </div>
         </div>
 
         <!-- Navigation Buttons -->
-        <div class="navigation-buttons mt-4">
-          <a href="{% url 'maktab:task_by_subject' subject.id %}" class="btn btn-secondary">
+        <div class="text-center mt-4">
+          <a href="{% url 'maktab:task_by_subject' section.id %}" class="btn btn-secondary me-2">
             <i class="bi bi-arrow-left"></i> Vazifalar ro'yxatiga qaytish
           </a>
           
-          <a href="{% url 'maktab:lesson_detail' lesson.id %}" class="btn btn-primary">
-            <i class="bi bi-book me-1"></i>Tegishli darsni ko'rish
-          </a>
+          <!-- Teacher/Parent Navigation Button -->
+          {% if user.role == 'teacher' %}
+            <a href="{% url 'maktab:lesson_detail' lesson.id %}" class="btn btn-primary">
+              <i class="bi bi-book me-1"></i>Tegishli darsni ko'rish
+            </a>
+          {% else %}
+            <!-- Blurred navigation button for parents -->
+            <div class="d-inline-block parent-nav-section">
+              <button class="btn btn-primary blurred-button" disabled>
+                <i class="bi bi-book me-1"></i>Tegishli darsni ko'rish
+              </button>
+              <div class="parent-warning-nav">
+                <small class="text-muted">
+                  <i class="bi bi-lock me-1"></i>
+                  O'qituvchilar uchun maxsus funksiya
+                </small>
+              </div>
+            </div>
+          {% endif %}
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-light py-4 mt-auto border-top">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <p class="mb-0">&copy; {% now "Y" %} MetodCom. Barcha huquqlar himoyalangan.</p>
-        </div>
-        <div class="col-md-6 text-md-end">
-          <a href="#" class="text-decoration-none text-muted me-3">Foydalanish shartlari</a>
-          <a href="#" class="text-decoration-none text-muted">Bog'lanish</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Bootstrap JS Bundle with Popper -->
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- PDF.js Script -->  
+  <script>
+    let pdfDoc = null;
+    let pageNum = {% if textbook_page %}{{ textbook_page.page_number }}{% else %}1{% endif %};
+    let pageIsRendering = false;
+    let pageNumIsPending = null;
+    let scale = 1.0;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    document.addEventListener('DOMContentLoaded', function() {
+      {% if textbook and textbook.pdf_file %}
+        const pdfUrl = '{{ textbook.pdf_file.url }}';
+        initPDF(pdfUrl);
+      {% endif %}
+    });
+
+    function initPDF(url) {
+      pdfjsLib.getDocument(url).promise.then(doc => {
+        pdfDoc = doc;
+        document.getElementById('pageInfo').textContent = `${pageNum} / ${doc.numPages}`;
+        renderPage(pageNum);
+      }).catch(err => {
+        console.error('PDF yükleme hatası:', err);
+        document.getElementById('pdfViewer').innerHTML = `
+          <div class="text-center py-5">
+            <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+            <h4 class="text-danger mt-3">PDF yüklenemedi</h4>
+            <p class="text-muted">Darslik faylını yüklerken xatolik yuz berdi.</p>
+          </div>
+        `;
+      });
+    }
+
+    function renderPage(num) {
+      pageIsRendering = true;
+      
+      pdfDoc.getPage(num).then(page => {
+        const viewport = page.getViewport({ scale });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderCtx = {
+          canvasContext: ctx,
+          viewport
+        };
+
+        page.render(renderCtx).promise.then(() => {
+          pageIsRendering = false;
+          
+          const viewer = document.getElementById('pdfViewer');
+          viewer.innerHTML = '';
+          canvas.className = 'pdf-canvas';
+          viewer.appendChild(canvas);
+
+          if (pageNumIsPending !== null) {
+            renderPage(pageNumIsPending);
+            pageNumIsPending = null;
+          }
+        });
+
+        document.getElementById('pageInfo').textContent = `${num} / ${pdfDoc.numPages}`;
+      });
+    }
+
+    function queueRenderPage(num) {
+      if (pageIsRendering) {
+        pageNumIsPending = num;
+      } else {
+        renderPage(num);
+      }
+    }
+
+    // Event Listeners
+    document.getElementById('prevPage')?.addEventListener('click', () => {
+      if (pageNum <= 1) return;
+      pageNum--;
+      queueRenderPage(pageNum);
+    });
+
+    document.getElementById('nextPage')?.addEventListener('click', () => {
+      if (pageNum >= pdfDoc.numPages) return;
+      pageNum++;
+      queueRenderPage(pageNum);
+    });
+
+    document.getElementById('zoomIn')?.addEventListener('click', () => {
+      scale += 0.2;
+      document.getElementById('zoomLevel').textContent = Math.round(scale * 100) + '%';
+      queueRenderPage(pageNum);
+    });
+
+    document.getElementById('zoomOut')?.addEventListener('click', () => {
+      if (scale <= 0.4) return;
+      scale -= 0.2;
+      document.getElementById('zoomLevel').textContent = Math.round(scale * 100) + '%';
+      queueRenderPage(pageNum);
+    });
+  </script>
 </body>
 </html>

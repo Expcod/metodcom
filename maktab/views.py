@@ -299,12 +299,23 @@ def task_detail(request, task_id):
     """Vazifa batafsil sahifasi"""
     task = get_object_or_404(Task, id=task_id, is_active=True)
     
+    # Vazifaga tegishli darslik sahifasini topish
+    textbook_page = None
+    textbook = None
+    
+    # Agar vazifaning darsi bilan bog'langan darslik sahifasi bo'lsa
+    if hasattr(task.lesson, 'textbook_pages') and task.lesson.textbook_pages.exists():
+        textbook_page = task.lesson.textbook_pages.first()
+        textbook = textbook_page.textbook
+    
     context = {
         'task': task,
         'lesson': task.lesson,
         'section': task.lesson.section,
         'subject': task.lesson.section.subject,
         'grade': task.lesson.section.subject.grade,
+        'textbook_page': textbook_page,
+        'textbook': textbook,
     }
     
     return render(request, 'school/task_detail.html', context)
