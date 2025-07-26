@@ -90,6 +90,7 @@ class Subject(models.Model):
 
 class Section(models.Model):
     name = models.CharField(max_length=50, verbose_name="Qism nomi")  # Masalan, 1-qism
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, related_name="sections", verbose_name="Sinf")
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="sections", verbose_name="Fan")
     description = models.TextField(blank=True, verbose_name="Tavsif")
 

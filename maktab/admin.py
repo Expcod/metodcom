@@ -28,11 +28,15 @@ admin_site = CustomAdminSite(name='custom_admin')
 
 class MethodologyInline(admin.StackedInline):
     model = Methodology
-    extra = 1
+    extra = 0
 
 class TextbookPageInline(admin.StackedInline):
     model = TextbookPage
-    extra = 1
+    extra = 0
+
+class TaskInline(admin.StackedInline):
+    model = Task
+    extra = 0
 
 class CustomUserAdmin(UserAdmin):
     list_display = ['phone_number', 'first_name', 'last_name', 'role', 'created_at', 'last_login_time']
@@ -73,7 +77,7 @@ class LessonAdmin(admin.ModelAdmin):
     list_display = ['title', 'section', 'order']
     list_filter = ['section__subject']
     search_fields = ['title']
-    inlines = [MethodologyInline, TextbookPageInline]
+    inlines = [MethodologyInline, TaskInline, TextbookPageInline]
 
 class MethodologyAdmin(admin.ModelAdmin):
     list_display = ['title', 'lesson', 'created_at','link']
